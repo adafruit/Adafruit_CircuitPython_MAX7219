@@ -16,18 +16,6 @@ _DISPLAYTEST = const(15)
 
 class Matrix8x8:
     def __init__(self, spi, cs):
-        """
-        Driver for a single MAX7219-based LED matrix.
-
-        >>> import max7219
-        >>> from machine import Pin, SPI
-        >>> spi = SPI(10000000, miso=Pin(12), mosi=Pin(13), sck=Pin(14))
-        >>> display = max7219.Matrix8x8(spi, Pin(2))
-        >>> display.fill(True)
-        >>> display.pixel(4, 4, False)
-        >>> display.show()
-
-        """
         self.spi = spi
         self.cs = cs
         self.cs.init(cs.OUT, True)
