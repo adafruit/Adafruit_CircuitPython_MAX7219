@@ -1,33 +1,12 @@
-# The MIT License (MIT)
-#
-# Copyright (c) 2016 Radomir Dopieralski for Adafruit Industries
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-"""
-`adafruit_max7219`
-====================================================
+# MicroPython SSD1306 OLED driver, I2C and SPI interfaces
+import time
+import framebuf
+import digitalio
 
-Driver for MAX7219 LED matrix driver chip.
+from adafruit_bus_device import spi_device
 
-* Author(s): Radomir Dopieralski
-"""
 
+# register definitions
 _NOOP = const(0)
 _DIGIT0 = const(1)
 _DIGIT1 = const(2)
@@ -44,47 +23,177 @@ _SHUTDOWN = const(12)
 _DISPLAYTEST = const(15)
 
 
-class Matrix8x8:
-    def __init__(self, spi, cs):
-        self.spi = spi
+class MAX7219_SPI:
+
+    def __init__(self, width, height, spi, csPin,
+                 baudrate=8000000, polarity=0, phase=0):
+        
+        cs = digitalio.DigitalInOut(csPin)
         self.cs = cs
-        self.cs.init(cs.OUT, True)
-        self.buffer = bytearray(8)
-        self.init()
+        self.cs.direction = digitalio.Direction.OUTPUT
+        
+        self.spiDevice = spi_device.SPIDevice(spi, cs, baudrate=baudrate,
+                                               polarity=polarity, phase=phase)
 
-    def _register(self, command, data):
-        self.cs.low()
-        self.spi.write(bytearray([command, data]))
-        self.cs.high()
+        
+        self.buffer = bytearray((height // 8) * width)
+        self.framebuf = framebuf.FrameBuffer1(self.buffer, width, height)
 
-    def init(self):
-        for command, data in (
-            (_SHUTDOWN, 0),
-            (_DISPLAYTEST, 0),
-            (_SCANLIMIT, 7),
-            (_DECODEMODE, 0),
-            (_SHUTDOWN, 1),
-        ):
-            self._register(command, data)
+        self.width = width
+        self.height = height
+
+        self.init_display()
 
     def brightness(self, value):
+        """
+        control the brightness of the display
+        param: value - 0->15 dimmest to brightest
+        """
         if not 0<= value <= 15:
             raise ValueError("Brightness out of range")
-        self._register(_INTENSITY, value)
-
-    def fill(self, color):
-        data = 0xff if color else 0x00
-        for y in range(8):
-            self.buffer[y] = data
-
-    def pixel(self, x, y, color=None):
-        if color is None:
-            return bool(self.buffer[y] & 1 << x)
-        elif color:
-            self.buffer[y] |= 1 << x
-        else:
-            self.buffer[y] &= ~(1 << x)
+        self.write_cmd(_INTENSITY, value)
 
     def show(self):
+        """
+        update the display with recent changes in buffer
+        """
         for y in range(8):
-            self._register(_DIGIT0 + y, self.buffer[y])
+            self.write_cmd(_DIGIT0 + y, self.buffer[y])
+
+    def fill(self, col):
+        """
+        set all buffer bits to a col
+        param: col - value > 0 set the buffer bit, else clears the buffer bit
+        """
+        self.framebuf.fill(col)
+
+    def pixel(self, x, y, col=None):
+        """
+        set one buffer bit
+        param: col - value > 0 set the buffer bit, else clears the buffer bit
+        """
+        col = 0x01 if col else 0x00
+        self.framebuf.pixel(x, y, col)
+
+    def scroll(self, dx, dy):
+        self.framebuf.scroll(dx, dy)
+    
+    def write_cmd(self, command, data):
+        print('command {} data {}'.format(command,data))
+        self.cs.value = False
+        with self.spiDevice as spiDevice:        
+            spiDevice.write(bytearray([command, data]))
+
+
+class Matrix8x8(MAX7219_SPI):
+    def __init__(self, spi, csPin):
+        super().__init__(8,8,spi,csPin)
+
+    def init_display(self):
+        for command, data in (
+                    (_SHUTDOWN, 0),
+                    (_DISPLAYTEST, 0),
+                    (_SCANLIMIT, 7),
+                    (_DECODEMODE, 0),
+                    (_SHUTDOWN, 1),
+        ):
+            self.write_cmd(command, data)        
+
+        self.fill(0)
+        self.show()
+
+    def text(self, string, x, y, col=1):
+        """
+        draw text in the 8x8 matrix.
+        """
+        self.framebuf.text(string, x, y, col)
+
+    def clearAll():
+        """
+        unlights all matrix leds
+        """
+        self.fill(0)
+
+class BCDDigits(MAX7219_SPI):
+    """
+    Basic support for display on a 7-Segment BCD display controlled
+    by a Max7219 chip using SPI.
+    """
+    def __init__(self, spi, csPin, nDigits=1):
+        self.nDigits = nDigits
+        super().__init__(self.nDigits, 8 ,spi ,csPin)
+
+    def init_display(self):
+        
+        for command, data in (
+                    (_SHUTDOWN, 0),
+                    (_DISPLAYTEST, 0),
+                    (_SCANLIMIT, 7),
+                    (_DECODEMODE, (2**self.nDigits)-1),
+                    (_SHUTDOWN, 1),
+        ):
+            self.write_cmd(command, data)        
+
+        self.clearAll()
+        self.show()
+
+    def setDigit(self, digit, digitValue):
+        """
+        set one digit in the display
+        param: digit - the display digit zero-based
+        param: digitValue - integer ranging from 0->15
+        """
+        for i in range(4):
+            print('digit {} pixel {} value {}'.format(digit,i+4,digitValue & 0x01))
+            self.pixel(digit,i,digitValue & 0x01)
+            digitValue >>= 1
+    
+    def setDigits(self, start, digits):
+        """
+        set the display from a list
+        param: start - digit to start display zero-based
+        param: digits - list of integer values ranging from 0->15
+        """
+        for digit in digits:
+            print('set digit {} start {}'.format(digit,start))
+            self.setDigit(start,digit)
+            start += 1
+
+    def setIntDigits(self, start, wide, value):
+        """
+        start is the start digit position zero based
+        param: wide is the number of digits to show/use
+        param: value is a number to display
+        """
+        value = abs(int(value))
+        digits = []
+        # initialize all digits to blank
+        for i in range(wide):
+            digits.append(0x0f)
+        # initalize a zero digit
+        digits[wide-1] = 0x00
+        # fill the field with digits right to left
+        for i in range(wide):
+            if value != 0:                    
+                digits[wide-i-1] = value % 10
+                value //= 10
+        # now send the digits to the display
+        self.setDigits(start, digits)        
+
+    def setDot(self,whichDigit, col=None):
+        """
+        set the decimal point for a digit
+        param: whichDigit - the digit to set the decimal point zero-based
+        param: col - value > zero lights the decimal point, else unlights the point
+        """
+        self.pixel(whichDigit,7,col)
+
+    def clearAll(self):
+        """
+        clear all digits and decimal points
+        """
+        self.fill(1)
+        for i in range(self.nDigits):
+            self.setDot(i)
+
+    
