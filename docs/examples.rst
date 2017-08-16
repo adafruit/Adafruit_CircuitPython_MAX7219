@@ -21,7 +21,7 @@ max7219.Matrix8x8 Example
     display.pixel(4, 4, False)
     display.show()
 
-max7219.BDCDDigits Example
+max7219.BCDDigits Example
 ######################
 
 .. code-block:: html
