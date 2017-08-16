@@ -6,6 +6,8 @@ For software SPI::
 max7219.Matrix8x8 Example
 #########################
 
+.. code-block:: html
+
     import max7219
     from board import TX, RX, A2
     import busio
@@ -21,6 +23,8 @@ max7219.Matrix8x8 Example
 
 max7219.BDCDDigits Example
 ######################
+
+.. code-block:: html
 
     import max7219
     from board import TX, RX, A2
