@@ -8,7 +8,7 @@ max7219.Matrix8x8 Example
 
 .. code-block:: html
 
-    import max7219
+    from adafruit_max7219 import matrices
     from board import TX, RX, A2
     import busio
 
@@ -16,7 +16,7 @@ max7219.Matrix8x8 Example
     din = TX
     cs = A2
     spi = busio.SPI(clk, MOSI=din)
-    display = max7219.Matrix8x8(spi, cs)
+    display = matrices.Matrix8x8(spi, cs)
     display.fill(True)
     display.pixel(4, 4, False)
     display.show()
@@ -26,7 +26,7 @@ max7219.BCDDigits Example
 
 .. code-block:: html
 
-    import max7219
+    from adafruit_max7219 import bcddigits
     from board import TX, RX, A2
     import busio
 
@@ -34,7 +34,7 @@ max7219.BCDDigits Example
     din = TX
     cs = A2
     spi = busio.SPI(clk, MOSI=din)
-    display = max7219.BCDDigits(spi, cs, nDigits=8)
+    display = bcddigits.BCDDigits(spi, cs, nDigits=8)
     display.clearAll()
-    display.setIntDigits(0,8,76543210)
+    display.showStr(0,8,'{:8.2f}'.format(-1234.561))
     display.show()
