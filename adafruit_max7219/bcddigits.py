@@ -37,14 +37,14 @@ class BCDDigits(max7219.MAX7219):
     Basic support for display on a 7-Segment BCD display controlled
     by a Max7219 chip using SPI.
     """
-    def __init__(self, spi, csPin, nDigits=1):
+    def __init__(self, spi, cs, nDigits=1):
         """
-        param: spi - an spi busio or spi bitbangio object
-        param: csPin - board pin to use as chip select signal
-        param: nDigits number of led 7-segment digits; default 1; max 8
+        :param object spi: an spi busio or spi bitbangio object
+        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
+        :param int nDigits: number of led 7-segment digits; default 1; max 8
         """
         self.nD = nDigits
-        super().__init__(self.nD, 8 ,spi ,csPin)
+        super().__init__(self.nD, 8 ,spi ,cs)
 
     def init_display(self):
         
@@ -63,8 +63,8 @@ class BCDDigits(max7219.MAX7219):
     def setDigit(self, d, v):
         """
         set one digit in the display
-        param: d - the digit position; zero-based
-        param: v - integer ranging from 0->15
+        :param int d: the digit position; zero-based
+        :param int v: integer ranging from 0->15
         """
         d = self.nD - d - 1
         for i in range(4):
@@ -75,8 +75,8 @@ class BCDDigits(max7219.MAX7219):
     def setDigits(self, s, ds):
         """
         set the display from a list
-        param: s - digit to start display zero-based
-        param: ds - list of integer values ranging from 0->15
+        :param int s: digit to start display zero-based
+        :param list ds: list of integer values ranging from 0->15
         """
         for d in ds:
             #print('set digit {} start {}'.format(d,start))
@@ -86,8 +86,8 @@ class BCDDigits(max7219.MAX7219):
     def setDot(self,d, col=None):
         """
         set the decimal point for a digit
-        param: d - the digit to set the decimal point zero-based
-        param: col - value > zero lights the decimal point, else unlights the point
+        :param int d: the digit to set the decimal point zero-based 
+        :param int col: value > zero lights the decimal point, else unlights the point
         """
         if d < self.nD and d >= 0:
             #print('set dot {} = {}'.format((self.nD - d -1),col))
@@ -104,8 +104,8 @@ class BCDDigits(max7219.MAX7219):
     def showStr(self,s,str):        
         """
         displays a numeric str in the display.  shows digits 0-9, -, and .
-        param: s - start position to show the numeric string
-        param: str - the numeric string
+        :param int s: start position to show the numeric string
+        :param string str: the numeric string
         """
         ci = s
         for i in range (len(str)):
@@ -115,7 +115,7 @@ class BCDDigits(max7219.MAX7219):
             if c >= '0' and c<='9':
                 v = int(c)
             elif c == '-':
-                v = 10
+                v = 10 # minus sign
             elif c == '.':
                 self.setDot(ci-1,1)
                 continue
@@ -125,7 +125,7 @@ class BCDDigits(max7219.MAX7219):
     def showHelp(self, s):
         """
         display the word HELP in the display
-        param: s - start position to show HELP
+        :param int s: start position to show HELP
         """
         digits = [12,11,13,14]
         self.setDigits(s,digits)
