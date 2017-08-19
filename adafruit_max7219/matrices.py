@@ -37,6 +37,7 @@ class Matrix8x8(max7219.MAX7219):
         """
         :param object spi: an spi busio or spi bitbangio object
         :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal 
+        """
         super().__init__(8,8,spi,cs)
 
     def init_display(self):
