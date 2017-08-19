@@ -92,7 +92,7 @@ class MAX7219:
 
     def show(self):
         """
-        update the display with recent changes in buffer
+        update the display with recent changes in buffer 
         """
         for y in range(8):
             self.write_cmd(_DIGIT0 + y, self.buffer[y])

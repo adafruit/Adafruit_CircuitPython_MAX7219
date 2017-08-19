@@ -57,13 +57,13 @@ class BCDDigits(max7219.MAX7219):
         ):
             self.write_cmd(cmd, data)        
 
-        self.clearAll()
+        self.clear_all()
         self.show()
 
-    def setDigit(self, d, v):
+    def set_digit(self, d, v):
         """
         set one digit in the display
-        :param int d: the digit position; zero-based
+        :param int d: the digit position; zero-based 
         :param int v: integer ranging from 0->15
         """
         d = self.nD - d - 1
@@ -72,7 +72,7 @@ class BCDDigits(max7219.MAX7219):
             self.pixel(d,i,v & 0x01)
             v >>= 1
     
-    def setDigits(self, s, ds):
+    def set_digits(self, s, ds):
         """
         set the display from a list
         :param int s: digit to start display zero-based
@@ -80,10 +80,10 @@ class BCDDigits(max7219.MAX7219):
         """
         for d in ds:
             #print('set digit {} start {}'.format(d,start))
-            self.setDigit(s,d)
+            self.set_digit(s,d)
             s += 1
 
-    def setDot(self,d, col=None):
+    def show_dot(self,d, col=None):
         """
         set the decimal point for a digit
         :param int d: the digit to set the decimal point zero-based 
@@ -93,15 +93,15 @@ class BCDDigits(max7219.MAX7219):
             #print('set dot {} = {}'.format((self.nD - d -1),col))
             self.pixel(self.nD-d-1, 7,col)
 
-    def clearAll(self):
+    def clear_all(self):
         """
         clear all digits and decimal points
         """
         self.fill(1)
         for i in range(self.nD):
-            self.setDot(i)
+            self.show_dot(i)
 
-    def showStr(self,s,str):        
+    def show_str(self,s,str):        
         """
         displays a numeric str in the display.  shows digits 0-9, -, and .
         :param int s: start position to show the numeric string
@@ -117,16 +117,16 @@ class BCDDigits(max7219.MAX7219):
             elif c == '-':
                 v = 10 # minus sign
             elif c == '.':
-                self.setDot(ci-1,1)
+                self.show_dot(ci-1,1)
                 continue
-            self.setDigit(ci,v)
+            self.set_digit(ci,v)
             ci += 1
     
-    def showHelp(self, s):
+    def show_help(self, s):
         """
         display the word HELP in the display
         :param int s: start position to show HELP
         """
         digits = [12,11,13,14]
-        self.setDigits(s,digits)
+        self.set_digits(s,digits)
 
