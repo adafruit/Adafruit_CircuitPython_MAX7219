@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 """
 `adafruit_max7219.MAX7219` - MAX7219 LED Matrix/Digit Display Driver
-============================================================
+========================================================================
 CircuitPython library to support MAX7219 LED Matrix/Digit Display Driver.
 This library supports the use of the MAX7219-based display in CircuitPython, 
 either an 8x8 matrix or a 8 digit 7-segment numeric display.
@@ -58,16 +58,15 @@ _INTENSITY = const(10)
 
 class MAX7219:
     
-    def __init__(self, w, h, spi, csPin,
+    def __init__(self, w, h, spi, cs,
                  baudrate=8000000, polarity=0, phase=0):
         """
         :param int w: the number of pixels wide
         :param int h: the number of pixels high
         :param object spi: an spi busio or spi bitbangio object
-        :param ~microcontroller.Pin csPin: board pin to use as chip select signal
+        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal 
         """
         
-        cs = digitalio.DigitalInOut(csPin)
         self.cs = cs
         self.cs.direction = digitalio.Direction.OUTPUT
         
