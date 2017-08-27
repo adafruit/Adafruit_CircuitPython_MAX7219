@@ -27,8 +27,8 @@ master_doc = 'README'
 
 # General information about the project.
 project = u'Adafruit MAX7219 Library'
-copyright = u'2017 Radomir Dopieralski'
-author = u'Radomir Dopieralski'
+copyright = u'2017, Adafruit CiruitPython and Bundle contributors'
+author = u'Michael McWethy'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -137,6 +137,6 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'AdafruitMAX7219Library', u'Adafruit MAX7219 Library Documentation',
-     author, 'AdafruitMAX7219Library', 'One line description of project.',
+     author, 'AdafruitMAX7219Library', 'Python driver classes for MAX7219 chip',
      'Miscellaneous'),
 ]

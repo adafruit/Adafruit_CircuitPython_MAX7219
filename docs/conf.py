@@ -46,7 +46,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Adafruit MAX7219'
-copyright = u'2016, Radomir Dopieralski'
+copyright = u'2017, Adafruit CiruitPython and Bundle contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -199,7 +199,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'AdafruitMAX7219.tex', u'Adafruit MAX7219 Documentation',
-   u'Radomir Dopieralski', 'manual'),
+   u'Michael McWethy', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -229,7 +229,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'adafruitmax7219', u'Adafruit MAX7219 Documentation',
-     [u'Radomir Dopieralski'], 1)
+     [u'Michael McWethy'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -243,7 +243,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'AdafruitMAX7219', u'Adafruit MAX7219 Documentation',
-   u'Radomir Dopieralski', 'AdafruitMAX7219', 'One line description of project.',
+   u'Michael McWethy', 'AdafruitMAX7219', 'Python driver classes for MAX7219 chip.',
    'Miscellaneous'),
 ]
 
