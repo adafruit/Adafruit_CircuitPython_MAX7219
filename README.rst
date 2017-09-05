@@ -2,7 +2,7 @@
 Introduction
 ============
 
-.. image:: https://readthedocs.org/projects/adafruit-circuitpython-max7219/badge/?version=latest
+.. image :: https://readthedocs.org/projects/adafruit-circuitpython-max7219/badge/?version=latest
     :target: https://circuitpython.readthedocs.io/projects/max7219/en/latest/
     :alt: Documentation Status
 
@@ -16,7 +16,7 @@ Introduction
 
 CircuitPython driver for the MAX7219 LED matrix driver chip.
 
-.. seealso:: See `here <https://github.com/adafruit/micropython-adafruit-max7219>`_ for the equivalent MicroPython driver.
+See `here <https://github.com/adafruit/micropython-adafruit-max7219>`_ for the equivalent MicroPython driver.
 
 Dependencies
 =============
@@ -39,7 +39,7 @@ adafruit_max7219.Matrix8x8 Example
 
 .. code-block:: python
 
-      from  adafruit_max7219 import matrices
+      from adafruit_max7219 import matrices
       from board import TX, RX, A2
       import busio
       import digitalio
@@ -76,7 +76,7 @@ adafruit_max7219.BCDDigits Example
 
 .. code-block:: python
 
-      from  adafruit_max7219 import bcddigits
+      from adafruit_max7219 import bcddigits
       from board import TX, RX, A2
       import bitbangio
       import digitalio
