@@ -57,7 +57,7 @@ class Matrix8x8(max7219.MAX7219):
         """
         draw text in the 8x8 matrix.
 
-        :param int x: x postiion of LED in matrix
+        :param int x: x position of LED in matrix
         :param int y: y position of LED in matrix
         :param string str: string to place in to display
         """
