@@ -35,8 +35,8 @@ _DISPLAYTEST = const(15)
 class Matrix8x8(max7219.MAX7219):
     def __init__(self, spi, cs):
         """
-        :param object spi: an spi busio or spi bitbangio object 
-        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal 
+        :param object spi: an spi busio or spi bitbangio object
+        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
         """
         super().__init__(8,8,spi,cs)
 
@@ -48,7 +48,7 @@ class Matrix8x8(max7219.MAX7219):
                     (_DECODEMODE, 0),
                     (_SHUTDOWN, 1),
         ):
-            self.write_cmd(cmd, data)        
+            self.write_cmd(cmd, data)
 
         self.fill(0)
         self.show()
@@ -56,6 +56,10 @@ class Matrix8x8(max7219.MAX7219):
     def text(self, str, x, y, col=1):
         """
         draw text in the 8x8 matrix.
+
+        :param int x: x position of LED in matrix
+        :param int y: y position of LED in matrix
+        :param string str: string to place in to display
         """
         self.framebuf.text(str, x, y, col)
 
@@ -64,4 +68,3 @@ class Matrix8x8(max7219.MAX7219):
         unlights all matrix leds
         """
         self.fill(0)
-
