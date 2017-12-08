@@ -1,4 +1,4 @@
--# This is a common .travis.yml for generating library release zip files for
+# This is a common .travis.yml for generating library release zip files for
 # CircuitPython library releases using circuitpython-build-tools.
 # See https://github.com/adafruit/circuitpython-build-tools for detailed setup
 # instructions.
@@ -25,8 +25,6 @@ install:
   - pip install pylint circuitpython-travis-build-tools
 
 script:
-  - pylint adafruit_max7219/max7219.py
-  - pylint adafruit_max7219/bcsdigits.py
-  - pylint adafruit_max7219/matrices.py
+  - pylint adafruit_max7219/*.py
   - ([[ ! -d "examples" ]] || pylint --disable=missing-docstring,invalid-name examples/*.py)
   - circuitpython-build-bundles --filename_prefix adafruit-circuitpython-max7219 --library_location .
