@@ -26,6 +26,10 @@
 ====================================================
 """
 from adafruit_max7219 import max7219
+from micropython import const
+
+__version__ = "0.0.0-auto.0"
+__repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_MAX7219.git"
 
 _DECODEMODE = const(9)
 _SCANLIMIT = const(11)
@@ -40,93 +44,91 @@ class BCDDigits(max7219.MAX7219):
     def __init__(self, spi, cs, nDigits=1):
         """
         :param object spi: an spi busio or spi bitbangio object
-        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
+        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select
+            signal
         :param int nDigits: number of led 7-segment digits; default 1; max 8
         """
-        self.nD = nDigits
-        super().__init__(self.nD, 8 ,spi ,cs)
+        self._ndigits = nDigits
+        super().__init__(self._ndigits, 8, spi, cs)
 
     def init_display(self):
-        
-        for cmd, data in (
-                    (_SHUTDOWN, 0),
-                    (_DISPLAYTEST, 0),
-                    (_SCANLIMIT, 7),
-                    (_DECODEMODE, (2**self.nD)-1),
-                    (_SHUTDOWN, 1),
-        ):
-            self.write_cmd(cmd, data)        
+
+        for cmd, data in ((_SHUTDOWN, 0),
+                          (_DISPLAYTEST, 0),
+                          (_SCANLIMIT, 7),
+                          (_DECODEMODE, (2**self._ndigits)-1),
+                          (_SHUTDOWN, 1),
+                         ):
+            self.write_cmd(cmd, data)
 
         self.clear_all()
         self.show()
 
-    def set_digit(self, d, v):
+    def set_digit(self, dpos, value):
         """
         set one digit in the display
-        :param int d: the digit position; zero-based 
-        :param int v: integer ranging from 0->15
+        :param int dpos: the digit position; zero-based
+        :param int value: integer ranging from 0->15
         """
-        d = self.nD - d - 1
+        dpos = self._ndigits - dpos - 1
         for i in range(4):
-            #print('digit {} pixel {} value {}'.format(d,i+4,v & 0x01))
-            self.pixel(d,i,v & 0x01)
-            v >>= 1
-    
-    def set_digits(self, s, ds):
+            #print('digit {} pixel {} value {}'.format(dpos,i+4,v & 0x01))
+            self.pixel(dpos, i, value & 0x01)
+            value >>= 1
+
+    def set_digits(self, start, values):
         """
         set the display from a list
         :param int s: digit to start display zero-based
         :param list ds: list of integer values ranging from 0->15
         """
-        for d in ds:
+        for value in values:
             #print('set digit {} start {}'.format(d,start))
-            self.set_digit(s,d)
-            s += 1
+            self.set_digit(start, value)
+            start += 1
 
-    def show_dot(self,d, col=None):
+    def show_dot(self, dpos, bit_value=None):
         """
         set the decimal point for a digit
-        :param int d: the digit to set the decimal point zero-based 
-        :param int col: value > zero lights the decimal point, else unlights the point
+        :param int dpos: the digit to set the decimal point zero-based
+        :param int value: value > zero lights the decimal point, else unlights the point
         """
-        if d < self.nD and d >= 0:
-            #print('set dot {} = {}'.format((self.nD - d -1),col))
-            self.pixel(self.nD-d-1, 7,col)
+        if dpos < self._ndigits and dpos >= 0:
+            #print('set dot {} = {}'.format((self._ndigits - d -1),col))
+            self.pixel(self._ndigits-dpos-1, 7, bit_value)
 
     def clear_all(self):
         """
         clear all digits and decimal points
         """
         self.fill(1)
-        for i in range(self.nD):
+        for i in range(self._ndigits):
             self.show_dot(i)
 
-    def show_str(self,s,str):        
+    def show_str(self, start, strg):
         """
         displays a numeric str in the display.  shows digits 0-9, -, and .
-        :param int s: start position to show the numeric string
+        :param int start: start position to show the numeric string
         :param string str: the numeric string
         """
-        ci = s
-        for i in range (len(str)):
-            c = str[i]
+        cpos = start
+        for char in strg:
             # print('c {}'.format(c))
-            v = 0x0f # assume blank 
-            if c >= '0' and c<='9':
-                v = int(c)
-            elif c == '-':
-                v = 10 # minus sign
-            elif c == '.':
-                self.show_dot(ci-1,1)
+            value = 0x0f # assume blank
+            if char >= '0' and char <= '9':
+                value = int(char)
+            elif char == '-':
+                value = 10 # minus sign
+            elif char == '.':
+                self.show_dot(cpos-1, 1)
                 continue
-            self.set_digit(ci,v)
-            ci += 1
-    
-    def show_help(self, s):
+            self.set_digit(cpos, value)
+            cpos += 1
+
+    def show_help(self, start):
         """
         display the word HELP in the display
-        :param int s: start position to show HELP
+        :param int start: start position to show HELP
         """
-        digits = [12,11,13,14]
-        self.set_digits(s,digits)
-
+        digits = [12, 11, 13, 14]
+        self.set_digits(start, digits)
