@@ -6,10 +6,6 @@ Introduction
     :target: https://circuitpython.readthedocs.io/projects/max7219/en/latest/
     :alt: Documentation Status
 
-.. image :: https://badges.gitter.im/adafruit/circuitpython.svg
-    :target: https://gitter.im/adafruit/circuitpython?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
-    :alt: Gitter
-
 .. image :: https://img.shields.io/discord/327254708534116352.svg
     :target: https://adafru.it/discord
     :alt: Discord
@@ -91,6 +87,13 @@ adafruit_max7219.BCDDigits Example
       display.show_str(0,'{:9.2f}'.format(-1234.56))
       display.show()
 
+API Reference
+=============
+
+.. toctree::
+   :maxdepth: 2
+
+   api
 
 Contributing
 ============
@@ -99,10 +102,26 @@ Contributions are welcome! Please read our `Code of Conduct
 <https://github.com/adafruit/Adafruit_CircuitPython_max7219/blob/master/CODE_OF_CONDUCT.md>`_
 before contributing to help this project stay welcoming.
 
-API Reference
-=============
+Building locally
+================
 
-.. toctree::
-   :maxdepth: 2
+To build this library locally you'll need to install the
+`circuitpython-build-tools <https://github.com/adafruit/circuitpython-build-tools>`_ package.
 
-   api
+.. code-block:: shell
+
+   python3 -m venv .env
+   source .env/bin/activate
+   pip install circuitpython-build-tools
+
+Once installed, make sure you are in the virtual environment:
+
+.. code-block:: shell
+
+   source .env/bin/activate
+
+Then run the build:
+
+.. code-block:: shell
+
+   circuitpython-build-bundles --filename_prefix adafruit-circuitpython-max7219 --library_location .
