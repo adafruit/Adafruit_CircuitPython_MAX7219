@@ -1,6 +1,9 @@
 
 .. If you created a package, create one automodule per module in the package.
 
+.. module:: adafruit_max7219.max7219
+   :members
+
 .. module:: adafruit_max7219.matrices
    :members:
 
