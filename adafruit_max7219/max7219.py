@@ -42,7 +42,7 @@ Implementation Notes
 
 * Adafruit `MAX7219CNG LED Matrix/Digit Display Driver -
   MAX7219 <https://www.adafruit.com/product/453>`_ (Product ID: 453)
-  
+
 **Software and Dependencies:**
 
 * Adafruit CircuitPython firmware for the ESP8622 and M0-based boards:
