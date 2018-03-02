@@ -22,7 +22,7 @@
 #
 
 """
-:mod:`adafruit_max7219.matrices.Matrix8x8`
+`adafruit_max7219.matrices.Matrix8x8`
 ====================================================
 """
 from adafruit_max7219 import max7219

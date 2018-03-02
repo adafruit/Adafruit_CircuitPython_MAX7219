@@ -22,7 +22,7 @@
 #
 
 """
-:mod:`adafruit_max7219.bcddigits.BCDDigits`
+`adafruit_max7219.bcddigits.BCDDigits`
 ====================================================
 """
 from adafruit_max7219 import max7219

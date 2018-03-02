@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """
-`adafruit_max7219.MAX7219` - MAX7219 LED Matrix/Digit Display Driver
+`adafruit_max7219.max7219` - MAX7219 LED Matrix/Digit Display Driver
 ========================================================================
 CircuitPython library to support MAX7219 LED Matrix/Digit Display Driver.
 This library supports the use of the MAX7219-based display in CircuitPython,
