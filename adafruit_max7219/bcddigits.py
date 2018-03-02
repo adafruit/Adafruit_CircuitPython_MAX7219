@@ -40,14 +40,12 @@ class BCDDigits(max7219.MAX7219):
     """
     Basic support for display on a 7-Segment BCD display controlled
     by a Max7219 chip using SPI.
+
+    :param object spi: an spi busio or spi bitbangio object
+    :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
+    :param int nDigits: number of led 7-segment digits; default 1; max 8
     """
     def __init__(self, spi, cs, nDigits=1):
-        """
-        :param object spi: an spi busio or spi bitbangio object
-        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select
-            signal
-        :param int nDigits: number of led 7-segment digits; default 1; max 8
-        """
         self._ndigits = nDigits
         super().__init__(self._ndigits, 8, spi, cs)
 
@@ -66,7 +64,8 @@ class BCDDigits(max7219.MAX7219):
 
     def set_digit(self, dpos, value):
         """
-        set one digit in the display
+        Set one digit in the display.
+
         :param int dpos: the digit position; zero-based
         :param int value: integer ranging from 0->15
         """
@@ -78,7 +77,8 @@ class BCDDigits(max7219.MAX7219):
 
     def set_digits(self, start, values):
         """
-        set the display from a list
+        Set the display from a list.
+
         :param int s: digit to start display zero-based
         :param list ds: list of integer values ranging from 0->15
         """
@@ -89,7 +89,8 @@ class BCDDigits(max7219.MAX7219):
 
     def show_dot(self, dpos, bit_value=None):
         """
-        set the decimal point for a digit
+        Set the decimal point for a digit.
+
         :param int dpos: the digit to set the decimal point zero-based
         :param int value: value > zero lights the decimal point, else unlights the point
         """
@@ -99,7 +100,7 @@ class BCDDigits(max7219.MAX7219):
 
     def clear_all(self):
         """
-        clear all digits and decimal points
+        Clear all digits and decimal points.
         """
         self.fill(1)
         for i in range(self._ndigits):
@@ -107,7 +108,8 @@ class BCDDigits(max7219.MAX7219):
 
     def show_str(self, start, strg):
         """
-        displays a numeric str in the display.  shows digits 0-9, -, and .
+        Displays a numeric str in the display.  Shows digits ``0-9``, ``-``, and ``.``.
+
         :param int start: start position to show the numeric string
         :param string str: the numeric string
         """
@@ -127,7 +129,8 @@ class BCDDigits(max7219.MAX7219):
 
     def show_help(self, start):
         """
-        display the word HELP in the display
+        Display the word HELP in the display.
+
         :param int start: start position to show HELP
         """
         digits = [12, 11, 13, 14]
