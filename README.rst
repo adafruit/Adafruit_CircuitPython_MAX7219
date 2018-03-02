@@ -27,9 +27,6 @@ This is easily achieved by downloading
 Usage Example
 =============
 
-Examples
-********
-
 adafruit_max7219.Matrix8x8 Example
 ----------------------------------
 
