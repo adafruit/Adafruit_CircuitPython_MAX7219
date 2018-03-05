@@ -22,7 +22,7 @@
 #
 
 """
-:mod:`adafruit_max7219.matrices.Matrix8x8`
+`adafruit_max7219.matrices.Matrix8x8`
 ====================================================
 """
 from adafruit_max7219 import max7219
@@ -37,12 +37,13 @@ _SHUTDOWN = const(12)
 _DISPLAYTEST = const(15)
 
 class Matrix8x8(max7219.MAX7219):
-    """Driver for a 8x8 LED matrix based on the MAX7219 chip"""
+    """
+    Driver for a 8x8 LED matrix based on the MAX7219 chip.
+
+    :param object spi: an spi busio or spi bitbangio object
+    :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
+    """
     def __init__(self, spi, cs):
-        """
-        :param object spi: an spi busio or spi bitbangio object
-        :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
-        """
         super().__init__(8, 8, spi, cs)
 
     def init_display(self):
@@ -59,7 +60,7 @@ class Matrix8x8(max7219.MAX7219):
 
     def text(self, strg, xpos, ypos, bit_value=1):
         """
-        draw text in the 8x8 matrix.
+        Draw text in the 8x8 matrix.
 
         :param int xpos: x position of LED in matrix
         :param int ypos: y position of LED in matrix
@@ -70,6 +71,6 @@ class Matrix8x8(max7219.MAX7219):
 
     def clear_all(self):
         """
-        unlights all matrix leds
+        Clears all matrix leds.
         """
         self.fill(0)
