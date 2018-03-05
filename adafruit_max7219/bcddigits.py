@@ -64,7 +64,7 @@ class BCDDigits(max7219.MAX7219):
 
     def set_digit(self, dpos, value):
         """
-        Set one digit in the display.
+        Display one digit.
 
         :param int dpos: the digit position; zero-based
         :param int value: integer ranging from 0->15
@@ -77,7 +77,7 @@ class BCDDigits(max7219.MAX7219):
 
     def set_digits(self, start, values):
         """
-        Set the display from a list.
+        Display digits from a list.
 
         :param int s: digit to start display zero-based
         :param list ds: list of integer values ranging from 0->15
@@ -89,7 +89,7 @@ class BCDDigits(max7219.MAX7219):
 
     def show_dot(self, dpos, bit_value=None):
         """
-        Set the decimal point for a digit.
+        The decimal point for a digit.
 
         :param int dpos: the digit to set the decimal point zero-based
         :param int value: value > zero lights the decimal point, else unlights the point

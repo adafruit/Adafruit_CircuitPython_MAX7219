@@ -113,16 +113,16 @@ class MAX7219:
 
     def show(self):
         """
-        Updates the display with recent changes in buffer.
+        Updates the display.
         """
         for ypos in range(8):
             self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos])
 
     def fill(self, bit_value):
         """
-        Sets all buffer bits to a col
+        Fill the display buffer.
 
-        :param bit_value: int value > 0 set the buffer bit, else clears the buffer bit
+        :param int bit_value: value > 0 set the buffer bit, else clears the buffer bit
         """
         self.framebuf.fill(bit_value)
 
@@ -132,13 +132,13 @@ class MAX7219:
 
         :param xpos: x position to set bit
         :param ypos: y position to set bit
-        :param bit_value: int value > 0 sets the buffer bit, else clears the buffer bit
+        :param int bit_value: value > 0 sets the buffer bit, else clears the buffer bit
         """
         bit_value = 0x01 if bit_value else 0x00
         self.framebuf.pixel(xpos, ypos, bit_value)
 
     def scroll(self, delta_x, delta_y):
-        """Scolls the display using delta_x,delta_y."""
+        """Srcolls the display using delta_x,delta_y."""
         self.framebuf.scroll(delta_x, delta_y)
 
     def write_cmd(self, cmd, data):
