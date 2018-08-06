@@ -1,12 +1,12 @@
 import time
-from board import TX, RX, D1
+from board import TX, RX, A1
 import busio
 import digitalio
 from adafruit_max7219 import matrices
 
 mosi = TX
 clk = RX
-cs = digitalio.DigitalInOut(D1)
+cs = digitalio.DigitalInOut(A1)
 
 spi = busio.SPI(clk, MOSI=mosi)
 
