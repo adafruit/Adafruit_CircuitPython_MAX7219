@@ -1,13 +1,13 @@
 import time
 import random
-from board import TX, RX, A2
+from board import TX, RX, D1
 import busio
 import digitalio
 from adafruit_max7219 import bcddigits
 
 mosi = TX
 clk = RX
-cs = digitalio.DigitalInOut(A2)
+cs = digitalio.DigitalInOut(D1)
 
 spi = busio.SPI(clk, MOSI=mosi)
 

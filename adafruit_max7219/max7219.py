@@ -54,11 +54,10 @@ Implementation Notes
 #.  Datasheet: https://cdn-shop.adafruit.com/datasheets/MAX7219.pdf
 """
 # MicroPython SSD1306 OLED driver, I2C and SPI interfaces
-import framebuf
 import digitalio
-
 from adafruit_bus_device import spi_device
 from micropython import const
+import framebuf
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_MAX7219.git"
@@ -142,6 +141,7 @@ class MAX7219:
         self.framebuf.scroll(delta_x, delta_y)
 
     def write_cmd(self, cmd, data):
+        # pylint: disable=no-member
         """Writes a command to spi device."""
         #print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
