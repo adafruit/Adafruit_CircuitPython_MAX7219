@@ -10,8 +10,8 @@ Introduction
     :target: https://adafru.it/discord
     :alt: Discord
 
-.. image:: https://travis-ci.org/adafruit/Adafruit_CircuitPython_MAX7219.svg?branch=master
-    :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_MAX7219
+.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_MAX7219.svg?branch=master
+    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_MAX7219
     :alt: Build Status
 
 CircuitPython driver for the MAX7219 LED matrix driver chip.
