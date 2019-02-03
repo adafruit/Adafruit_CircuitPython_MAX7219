@@ -136,9 +136,9 @@ class MAX7219:
         bit_value = 0x01 if bit_value else 0x00
         self.framebuf.pixel(xpos, ypos, bit_value)
 
-    def scroll(self, delta_x, delta_y):
-        """Srcolls the display using delta_x,delta_y."""
-        self.framebuf.scroll(delta_x, delta_y)
+#    def scroll(self, delta_x, delta_y):
+#        """Srcolls the display using delta_x,delta_y."""
+#        self.framebuf.scroll(delta_x, delta_y)
 
     def write_cmd(self, cmd, data):
         # pylint: disable=no-member
