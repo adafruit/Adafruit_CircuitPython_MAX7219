@@ -7,6 +7,6 @@ Ensure your device works with this simple test.
     :caption: examples/max7219_simpletest.py
     :linenos:
 
-.. literalinclude:: ../examples/showbcddigits.py
-    :caption: examples/showbcddigits.py
+.. literalinclude:: ../examples/max7219_showbcddigits.py
+    :caption: examples/max7219_showbcddigits.py
     :linenos:
