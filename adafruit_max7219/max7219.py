@@ -79,14 +79,17 @@ class MAX7219:
     :param polarity: for SPIDevice polarity (default 0)
     :param phase: for SPIDevice phase (default 0)
     """
-    def __init__(self, width, height, spi, cs, *,
-                 baudrate=8000000, polarity=0, phase=0):
+
+    def __init__(
+        self, width, height, spi, cs, *, baudrate=8000000, polarity=0, phase=0
+    ):
 
         self._chip_select = cs
         self._chip_select.direction = digitalio.Direction.OUTPUT
 
-        self._spi_device = spi_device.SPIDevice(spi, cs, baudrate=baudrate,
-                                                polarity=polarity, phase=phase)
+        self._spi_device = spi_device.SPIDevice(
+            spi, cs, baudrate=baudrate, polarity=polarity, phase=phase
+        )
 
         self._buffer = bytearray((height // 8) * width)
         self.framebuf = framebuf.FrameBuffer1(self._buffer, width, height)
@@ -98,7 +101,6 @@ class MAX7219:
 
     def init_display(self):
         """Must be implemented by derived class (``matrices``, ``bcddigits``)"""
-        pass
 
     def brightness(self, value):
         """
@@ -143,7 +145,7 @@ class MAX7219:
     def write_cmd(self, cmd, data):
         # pylint: disable=no-member
         """Writes a command to spi device."""
-        #print('cmd {} data {}'.format(cmd,data))
+        # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
             my_spi_device.write(bytearray([cmd, data]))

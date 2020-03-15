@@ -35,7 +35,7 @@ while True:
         time.sleep(0.5)
 
     # show a string one character at a time
-    adafruit = 'Adafruit'
+    adafruit = "Adafruit"
     for char in adafruit:
         matrix.fill(0)
         matrix.text(char, 0, 0)

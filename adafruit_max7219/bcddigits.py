@@ -36,6 +36,7 @@ _SCANLIMIT = const(11)
 _SHUTDOWN = const(12)
 _DISPLAYTEST = const(15)
 
+
 class BCDDigits(max7219.MAX7219):
     """
     Basic support for display on a 7-Segment BCD display controlled
@@ -45,18 +46,20 @@ class BCDDigits(max7219.MAX7219):
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
     :param int nDigits: number of led 7-segment digits; default 1; max 8
     """
+
     def __init__(self, spi, cs, nDigits=1):
         self._ndigits = nDigits
         super().__init__(self._ndigits, 8, spi, cs)
 
     def init_display(self):
 
-        for cmd, data in ((_SHUTDOWN, 0),
-                          (_DISPLAYTEST, 0),
-                          (_SCANLIMIT, 7),
-                          (_DECODEMODE, (2**self._ndigits)-1),
-                          (_SHUTDOWN, 1),
-                         ):
+        for cmd, data in (
+            (_SHUTDOWN, 0),
+            (_DISPLAYTEST, 0),
+            (_SCANLIMIT, 7),
+            (_DECODEMODE, (2 ** self._ndigits) - 1),
+            (_SHUTDOWN, 1),
+        ):
             self.write_cmd(cmd, data)
 
         self.clear_all()
@@ -71,7 +74,7 @@ class BCDDigits(max7219.MAX7219):
         """
         dpos = self._ndigits - dpos - 1
         for i in range(4):
-            #print('digit {} pixel {} value {}'.format(dpos,i+4,v & 0x01))
+            # print('digit {} pixel {} value {}'.format(dpos,i+4,v & 0x01))
             self.pixel(dpos, i, value & 0x01)
             value >>= 1
 
@@ -83,7 +86,7 @@ class BCDDigits(max7219.MAX7219):
         :param list ds: list of integer values ranging from 0->15
         """
         for value in values:
-            #print('set digit {} start {}'.format(d,start))
+            # print('set digit {} start {}'.format(d,start))
             self.set_digit(start, value)
             start += 1
 
@@ -94,9 +97,9 @@ class BCDDigits(max7219.MAX7219):
         :param int dpos: the digit to set the decimal point zero-based
         :param int value: value > zero lights the decimal point, else unlights the point
         """
-        if dpos < self._ndigits and dpos >= 0:
-            #print('set dot {} = {}'.format((self._ndigits - d -1),col))
-            self.pixel(self._ndigits-dpos-1, 7, bit_value)
+        if 0 <= dpos < self._ndigits:
+            # print('set dot {} = {}'.format((self._ndigits - d -1),col))
+            self.pixel(self._ndigits - dpos - 1, 7, bit_value)
 
     def clear_all(self):
         """
@@ -116,13 +119,13 @@ class BCDDigits(max7219.MAX7219):
         cpos = start
         for char in strg:
             # print('c {}'.format(c))
-            value = 0x0f # assume blank
-            if char >= '0' and char <= '9':
+            value = 0x0F  # assume blank
+            if "0" <= char <= "9":
                 value = int(char)
-            elif char == '-':
-                value = 10 # minus sign
-            elif char == '.':
-                self.show_dot(cpos-1, 1)
+            elif char == "-":
+                value = 10  # minus sign
+            elif char == ".":
+                self.show_dot(cpos - 1, 1)
                 continue
             self.set_digit(cpos, value)
             cpos += 1
