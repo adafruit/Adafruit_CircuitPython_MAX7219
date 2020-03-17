@@ -36,6 +36,7 @@ _SCANLIMIT = const(11)
 _SHUTDOWN = const(12)
 _DISPLAYTEST = const(15)
 
+
 class Matrix8x8(max7219.MAX7219):
     """
     Driver for a 8x8 LED matrix based on the MAX7219 chip.
@@ -43,16 +44,18 @@ class Matrix8x8(max7219.MAX7219):
     :param object spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
     """
+
     def __init__(self, spi, cs):
         super().__init__(8, 8, spi, cs)
 
     def init_display(self):
-        for cmd, data in ((_SHUTDOWN, 0),
-                          (_DISPLAYTEST, 0),
-                          (_SCANLIMIT, 7),
-                          (_DECODEMODE, 0),
-                          (_SHUTDOWN, 1),
-                         ):
+        for cmd, data in (
+            (_SHUTDOWN, 0),
+            (_DISPLAYTEST, 0),
+            (_SCANLIMIT, 7),
+            (_DECODEMODE, 0),
+            (_SHUTDOWN, 1),
+        ):
             self.write_cmd(cmd, data)
 
         self.fill(0)
