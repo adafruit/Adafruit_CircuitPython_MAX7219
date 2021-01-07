@@ -149,3 +149,11 @@ class MAX7219:
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
             my_spi_device.write(bytearray([cmd, data]))
+
+    def rotation(self, direction):
+        """
+        Set display direction
+
+        :param direction:set int to change display direction, value 0 (default), 1, 2, 3
+        """
+        self.framebuf.rotation = direction
