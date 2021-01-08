@@ -73,6 +73,7 @@ adafruit_max7219.Matrix8x8 Example
 
       spi = busio.SPI(clk, MOSI=din)
       display = matrices.Matrix8x8(spi, cs)
+      display.rotation(1)    #change display direction
       while True:
           display.brightness(3)
 
