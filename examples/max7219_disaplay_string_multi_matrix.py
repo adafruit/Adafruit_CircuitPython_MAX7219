@@ -1,7 +1,3 @@
-# Display string on multi led matrix at any position
-# Author: songjiangzhang@hotmail.com
-# This sample use EPS32 S2 Board
-
 from adafruit_max7219 import matrices
 import board
 import busio
