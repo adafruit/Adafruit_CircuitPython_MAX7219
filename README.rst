@@ -73,6 +73,7 @@ adafruit_max7219.Matrix8x8 Example
 
       spi = busio.SPI(clk, MOSI=din)
       display = matrices.Matrix8x8(spi, cs)
+      display.rotation(1)    #change display direction
       while True:
           display.brightness(3)
 
@@ -124,3 +125,17 @@ Documentation
 =============
 
 For information on building library documentation, please check out `this guide <https://learn.adafruit.com/creating-and-sharing-a-circuitpython-library/sharing-our-docs-on-readthedocs#sphinx-5-1>`_.
+
+
+Additons
+=============
+
+1. Add rotation func
+
+.. code-block:: python
+   
+    matrix = matrices.Matrix8x8(spi, cs)
+    matrix.rotation(2)
+    
+
+
