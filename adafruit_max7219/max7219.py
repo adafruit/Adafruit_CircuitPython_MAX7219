@@ -137,6 +137,8 @@ class MAX7219:
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
-            my_spi_device.write(bytearray([cmd, data])) # send cmd and data to one(number is) of the cascaded matrixs.
+            my_spi_device.write(bytearray([cmd, data])) 
+            
+            # send Noop to all before number, if you want to know why, please ref to MAX7219.pdf.
             for i in range(number-1):
-                my_spi_device.write(bytearray([0, 0]))  # send Noop to all before number, if you want to know why, please ref to MAX7219.pdf.
+                my_spi_device.write(bytearray([0, 0]))  
