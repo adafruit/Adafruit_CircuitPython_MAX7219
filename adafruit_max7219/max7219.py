@@ -96,12 +96,14 @@ class MAX7219:
             raise ValueError("Brightness out of range")
         self.write_cmd(_INTENSITY, value)
 
-    def show(self):
+    def show(self, number = 1):
         """
         Updates the display.
+        
+        :param int number: whichi one is in the cascaded matrixs, default is 1.
         """
         for ypos in range(8):
-            self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos])
+            self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos],number)
 
     def fill(self, bit_value):
         """
@@ -126,10 +128,15 @@ class MAX7219:
         """Srcolls the display using delta_x,delta_y."""
         self.framebuf.scroll(delta_x, delta_y)
 
-    def write_cmd(self, cmd, data):
+    def write_cmd(self, cmd, data,number = 1):
         # pylint: disable=no-member
-        """Writes a command to spi device."""
+        """Writes a command to spi device.
+        
+        :param int number: whichi one is in the cascaded matrixs, default is 1.
+        """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
-            my_spi_device.write(bytearray([cmd, data]))
+            my_spi_device.write(bytearray([cmd, data])) # send cmd and data to one(number is) of the cascaded matrixs.
+            for i in range(number-1):
+                my_spi_device.write(bytearray([0, 0]))  # send Noop to all before number, if you want to know why, please ref to MAX7219.pdf.
