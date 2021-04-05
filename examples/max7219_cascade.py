@@ -3,7 +3,7 @@
 
 import time
 import random
-from board import TX, RX, A1
+from board import TX, RX, A2
 import busio
 import digitalio
 from adafruit_max7219 import matrices
