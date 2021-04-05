@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-from adafruit_max7219 import matrices
-from board import TX, RX, A2
-import busio
-import digitalio
 import time
 import random
+from board import TX, RX, A1
+import busio
+import digitalio
+from adafruit_max7219 import matrices
 
 clk = RX
 din = TX
@@ -14,6 +14,7 @@ cs = digitalio.DigitalInOut(A2)
         
 spi = busio.SPI(clk, MOSI=din)
 display = matrices.Matrix8x8(spi, cs)
+
 while True:
     display.brightness(1)
 
