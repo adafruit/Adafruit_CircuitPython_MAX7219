@@ -29,9 +29,13 @@ while True:
     display.clear_all()
     s = 'Hello, World!'
     display.text(s[random.randint(0,len(s)-1)],0,0)
-    display.show(1) # show random char in string s on the the first of cascaded matrixs.
+
+    # show random char in string s on the the first of cascaded matrixs.
+    display.show(1) 
     for c in range(len(s)*8):
         display.fill(0)
         display.text(s,-c,0)
-        display.show(2) # show scrolled string on the second of cascaded matrixs
+        
+        # show scrolled string on the second of cascaded matrixs.
+        display.show(2) 
         time.sleep(0.25)
