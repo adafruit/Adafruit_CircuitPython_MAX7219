@@ -136,6 +136,7 @@ class MAX7219:
         """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
+        
         with self._spi_device as my_spi_device:
             my_spi_device.write(bytearray([cmd, data])) 
             
