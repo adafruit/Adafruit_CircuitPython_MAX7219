@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2016 Philip R. Moyer  for Adafruit Industries
 # SPDX-FileCopyrightText: 2016 Radomir Dopieralski for Adafruit Industries
+# SPDX-FileCopyrightText: 2021 bluejazzCHN for Adafruit Industries
 #
 # SPDX-License-Identifier: MIT
 
