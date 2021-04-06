@@ -22,21 +22,21 @@ while True:
         #Demo One: cascaded matrix with two max7219
         # show random char in string s on the the first of cascaded matrixs.
         # show scroll string s on the second of cascaded matrixs.
-        display.text(s[random.randint(0,len(s)-1)],0,0)
-        display.show(1,2)
+        display.text(s[random.randint(0, len(s)-1)], 0, 0)
+        display.show(1, 2)
         
         for c in range(len(s)*8):
                 display.fill(0)
-                display.text(s,-c,0)
-                display.show(2,2) 
+                display.text(s, -c, 0)
+                display.show(2, 2) 
                 time.sleep(0.25)
                 
         #Demo two: scroll string s on the cascaded matrix with two max7219
         for c in range(len(s)*8):
                 display.fill(0)
-                display.text(s,-c,0)
-                display.show(1,2)
+                display.text(s, -c, 0)
+                display.show(1, 2)
                 display.fill(0)
-                display.text(s,-c+8,0)
-                display.show(2,2)
+                display.text(s, -c+8, 0)
+                display.show(2, 2)
                 time.sleep(0.25)
