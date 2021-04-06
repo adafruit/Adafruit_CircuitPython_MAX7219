@@ -104,7 +104,7 @@ class MAX7219:
         :param int t_num: total number of cascaded Matrixs,default is 1.
         """
         for ypos in range(8):
-            self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos],number)
+            self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos],number,t_num)
 
     def fill(self, bit_value):
         """
@@ -129,7 +129,7 @@ class MAX7219:
         """Srcolls the display using delta_x,delta_y."""
         self.framebuf.scroll(delta_x, delta_y)
 
-    def write_cmd(self, cmd, data,number = 1，t_num=1):
+    def write_cmd(self, cmd, data,number = 1, t_num=1):
         # pylint: disable=no-member
         """Writes a command to spi device.
         
