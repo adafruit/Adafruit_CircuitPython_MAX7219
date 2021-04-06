@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 bluejazzCHN for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 import time
 import random
 from board import TX, RX, A2
