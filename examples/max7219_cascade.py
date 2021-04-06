@@ -13,13 +13,6 @@ spi = busio.SPI(clk, MOSI=din)
 display = matrices.Matrix8x8(spi, cs)
 
 while True:
-    display.brightness(1)
-    display.fill(1)
-    display.pixel(3, 3)
-    display.pixel(3, 4)
-    display.pixel(4, 3)
-    display.pixel(4, 4)
-    display.show()
     time.sleep(3.0)
     display.clear_all()
     s = 'Hello, World!'
