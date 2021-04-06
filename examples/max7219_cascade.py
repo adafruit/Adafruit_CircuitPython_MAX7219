@@ -31,11 +31,11 @@ while True:
     display.text(s[random.randint(0,len(s)-1)],0,0)
 
     # show random char in string s on the the first of cascaded matrixs.
-    display.show(1) 
+    display.show(1,2) 
     for c in range(len(s)*8):
         display.fill(0)
         display.text(s,-c,0)
         
         # show scrolled string on the second of cascaded matrixs.
-        display.show(2) 
+        display.show(2,2) 
         time.sleep(0.25)
