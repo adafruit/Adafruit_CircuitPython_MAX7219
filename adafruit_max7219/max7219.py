@@ -150,3 +150,11 @@ class MAX7219:
             for i in range(0, number-1):
                 my_spi_device.write(bytearray([0, 0]))
                 i = i-i
+                
+    def rotation(self, direction):
+        """
+        Set display direction
+
+        :param direction:set int to change display direction, value 0 (default), 1, 2, 3
+        """
+        self.framebuf.rotation = direction
