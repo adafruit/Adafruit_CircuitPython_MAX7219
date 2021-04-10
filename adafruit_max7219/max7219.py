@@ -139,18 +139,20 @@ class MAX7219:
         """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
-        
+
         with self._spi_device as my_spi_device:
             for i in range(number, t_num):
-                my_spi_device.write(bytearray([0, 0]))  # send Noop to ones behind number Matrix
-                
-            my_spi_device.write(bytearray([cmd, data])) 
-            
+                my_spi_device.write(
+                    bytearray([0, 0])
+                )  # send Noop to ones behind number Matrix
+
+            my_spi_device.write(bytearray([cmd, data]))
+
             # send Noop to all before number, if you want to know why, please ref to MAX7219.pdf.
-            for i in range(0, number-1):
+            for i in range(0, number - 1):
                 my_spi_device.write(bytearray([0, 0]))
-                i = i-i
-                
+                i = i - i
+
     def rotation(self, direction):
         """
         Set display direction
