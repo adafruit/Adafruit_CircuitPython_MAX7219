@@ -140,11 +140,10 @@ class MAX7219:
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
 
+        # send Noop to ones behind number Matrix
         with self._spi_device as my_spi_device:
             for i in range(number, t_num):
-                my_spi_device.write(
-                    bytearray([0, 0])
-                )  # send Noop to ones behind number Matrix
+                my_spi_device.write(bytearray([0, 0]))  
 
             my_spi_device.write(bytearray([cmd, data]))
 
