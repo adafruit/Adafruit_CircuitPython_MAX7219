@@ -10,31 +10,22 @@
 CircuitPython library to support MAX7219 LED Matrix/Digit Display Driver.
 This library supports the use of the MAX7219-based display in CircuitPython,
 either an 8x8 matrix or a 8 digit 7-segment numeric display.
-
 See Also
 =========
 * matrices.Maxtrix8x8 is a class support an 8x8 led matrix display
 * bcddigits.BCDDigits is a class that support the 8 digit 7-segment display
-
 Beware that most CircuitPython compatible hardware are 3.3v logic level! Make
 sure that the input pin is 5v tolerant.
-
 * Author(s): Michael McWethy
-
 Implementation Notes
 --------------------
 **Hardware:**
-
 * Adafruit `MAX7219CNG LED Matrix/Digit Display Driver -
   MAX7219 <https://www.adafruit.com/product/453>`_ (Product ID: 453)
-
 **Software and Dependencies:**
-
 * Adafruit CircuitPython firmware for the ESP8622 and M0-based boards:
   https://github.com/adafruit/circuitpython/releases
-
 * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
-
 **Notes:**
 #.  Datasheet: https://cdn-shop.adafruit.com/datasheets/MAX7219.pdf
 """
@@ -55,7 +46,6 @@ _INTENSITY = const(10)
 class MAX7219:
     """
     MAX2719 - driver for displays based on max719 chip_select
-
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
     :param object spi: an spi busio or spi bitbangio object
@@ -90,7 +80,6 @@ class MAX7219:
     def brightness(self, value):
         """
         Controls the brightness of the display.
-
         :param int value: 0->15 dimmest to brightest
         """
         if not 0 <= value <= 15:
@@ -110,7 +99,6 @@ class MAX7219:
     def fill(self, bit_value):
         """
         Fill the display buffer.
-
         :param int bit_value: value > 0 set the buffer bit, else clears the buffer bit
         """
         self.framebuf.fill(bit_value)
@@ -118,7 +106,6 @@ class MAX7219:
     def pixel(self, xpos, ypos, bit_value=None):
         """
         Set one buffer bit
-
         :param xpos: x position to set bit
         :param ypos: y position to set bit
         :param int bit_value: value > 0 sets the buffer bit, else clears the buffer bit
@@ -155,7 +142,6 @@ class MAX7219:
     def rotation(self, direction):
         """
         Set display direction
-
         :param direction:set int to change display direction, value 0 (default), 1, 2, 3
         """
         self.framebuf.rotation = direction
