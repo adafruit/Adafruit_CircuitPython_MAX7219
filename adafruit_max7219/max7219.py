@@ -89,7 +89,6 @@ class MAX7219:
     def show(self, number=1, t_num=1):
         """
         Updates the display.
-        
         :param int number: which one is in the cascaded matrixs, default is 1.
         :param int t_num: total number of cascaded Matrixs,default is 1.
         """
@@ -120,7 +119,6 @@ class MAX7219:
     def write_cmd(self, cmd, data, number=1, t_num=1):
         # pylint: disable=no-member
         """Writes a command to spi device.
-        
         :param int number: whichi one is in the cascaded matrixs, default is 1.
         :param int t_num: total number of cascaded Matrixs,default is 1.
         """
