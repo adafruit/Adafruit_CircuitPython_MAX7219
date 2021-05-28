@@ -10,22 +10,32 @@
 CircuitPython library to support MAX7219 LED Matrix/Digit Display Driver.
 This library supports the use of the MAX7219-based display in CircuitPython,
 either an 8x8 matrix or a 8 digit 7-segment numeric display.
+
 See Also
 =========
 * matrices.Maxtrix8x8 is a class support an 8x8 led matrix display
 * bcddigits.BCDDigits is a class that support the 8 digit 7-segment display
+
 Beware that most CircuitPython compatible hardware are 3.3v logic level! Make
 sure that the input pin is 5v tolerant.
+
 * Author(s): Michael McWethy
+
 Implementation Notes
 --------------------
 **Hardware:**
-* Adafruit `MAX7219CNG LED Matrix/Digit Display Driver -
+
+* `Adafruit MAX7219CNG LED Matrix/Digit Display Driver -
   MAX7219 <https://www.adafruit.com/product/453>`_ (Product ID: 453)
+
 **Software and Dependencies:**
+
 * Adafruit CircuitPython firmware for the ESP8622 and M0-based boards:
   https://github.com/adafruit/circuitpython/releases
-* Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
+
+* Adafruit's Bus Device library:
+  https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
+
 **Notes:**
 #.  Datasheet: https://cdn-shop.adafruit.com/datasheets/MAX7219.pdf
 """
