@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2016 Philip R. Moyer  for Adafruit Industries
 # SPDX-FileCopyrightText: 2016 Radomir Dopieralski for Adafruit Industries
+# SPDX-FileCopyrightText: 2021 bluejazzCHN for Adafruit Industries
 #
 # SPDX-License-Identifier: MIT
 
@@ -24,7 +25,7 @@ Implementation Notes
 --------------------
 **Hardware:**
 
-* Adafruit `MAX7219CNG LED Matrix/Digit Display Driver -
+* `Adafruit MAX7219CNG LED Matrix/Digit Display Driver -
   MAX7219 <https://www.adafruit.com/product/453>`_ (Product ID: 453)
 
 **Software and Dependencies:**
@@ -32,7 +33,8 @@ Implementation Notes
 * Adafruit CircuitPython firmware for the ESP8622 and M0-based boards:
   https://github.com/adafruit/circuitpython/releases
 
-* Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
+* Adafruit's Bus Device library:
+  https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
 
 **Notes:**
 #.  Datasheet: https://cdn-shop.adafruit.com/datasheets/MAX7219.pdf
@@ -56,7 +58,6 @@ MAX7219_REG_NOOP = 0x0
 class MAX7219:
     """
     MAX2719 - driver for displays based on max719 chip_select
-
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
     :param object spi: an spi busio or spi bitbangio object
@@ -99,12 +100,14 @@ class MAX7219:
             raise ValueError("Brightness out of range")
         self.write_cmd(_INTENSITY, value)
 
-    def show(self):
+    def show(self, number=1, t_num=1):
         """
         Updates the display.
+        :param int number: which one is in the cascaded matrixs, default is 1.
+        :param int t_num: total number of cascaded Matrixs,default is 1.
         """
         for ypos in range(8):
-            self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos])
+            self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos], number, t_num)
 
     def fill(self, bit_value):
         """
@@ -129,18 +132,30 @@ class MAX7219:
         """Srcolls the display using delta_x,delta_y."""
         self.framebuf.scroll(delta_x, delta_y)
 
-    def write_cmd(self, cmd, data):
+    def write_cmd(self, cmd, data, number=1, t_num=1):
         # pylint: disable=no-member
-        """Writes a command to spi device."""
+        """Writes a command to spi device.
+        :param int number: whichi one is in the cascaded matrixs, default is 1.
+        :param int t_num: total number of cascaded Matrixs,default is 1.
+        """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
+
+        # send Noop to ones behind number Matrix
         with self._spi_device as my_spi_device:
+            for i in range(number, t_num):
+                my_spi_device.write(bytearray([0, 0]))
+
             my_spi_device.write(bytearray([cmd, data]))
+
+            # send Noop to all before number, if you want to know why, please ref to MAX7219.pdf.
+            for i in range(0, number - 1):
+                my_spi_device.write(bytearray([0, 0]))
+                i = i - i
 
     def rotation(self, direction):
         """
         Set display direction
-
         :param direction:set int to change display direction, value 0 (default), 1, 2, 3
         """
         self.framebuf.rotation = direction
