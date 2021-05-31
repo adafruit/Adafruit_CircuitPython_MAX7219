@@ -133,9 +133,6 @@ Additons
 1. Add rotation func
 
 .. code-block:: python
-   
+
     matrix = matrices.Matrix8x8(spi, cs)
     matrix.rotation(2)
-    
-
-

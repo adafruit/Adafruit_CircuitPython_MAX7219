@@ -53,7 +53,6 @@ _INTENSITY = const(10)
 MAX7219_REG_NOOP = 0x0
 
 
-
 class MAX7219:
     """
     MAX2719 - driver for displays based on max719 chip_select
@@ -68,7 +67,7 @@ class MAX7219:
     """
 
     def __init__(
-        self, width, height, spi, cs, *, baudrate=8000000, polarity=0, phase=0,num=1
+        self, width, height, spi, cs, *, baudrate=8000000, polarity=0, phase=0, num=1
     ):
 
         self._chip_select = cs
@@ -84,7 +83,6 @@ class MAX7219:
         self.width = width
         self.height = height
         self.num = num
-
 
         self.init_display()
 
@@ -147,21 +145,20 @@ class MAX7219:
         """
         self.framebuf.rotation = direction
 
-        
     def _write(self, data):
         """
-        Send the bytes (which should comprise of alternating command, data values) over the SPI device.
-        
+        Send the bytes (which should comprise of alternating command, data values)
+        over the SPI device.
+
         :param data: command collections
         """
 
-        self._chip_select.value=False
+        self._chip_select.value = False
         with self._spi_device as my_spi_device:
             my_spi_device.write(bytes(data))
-        self._chip_select.value=True
+        self._chip_select.value = True
 
-
-    def show_char_position(self,position=0):
+    def show_char_position(self, position=0):
         """
         write data to the position that is one of multi led matrix
 
@@ -169,4 +166,7 @@ class MAX7219:
 
         """
         for ypos in range(8):
-            self._write([_DIGIT0 + ypos, self._buffer[ypos]]+([MAX7219_REG_NOOP, 0] *(position)))
+            self._write(
+                [_DIGIT0 + ypos, self._buffer[ypos]]
+                + ([MAX7219_REG_NOOP, 0] * (position))
+            )
