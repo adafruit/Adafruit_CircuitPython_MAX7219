@@ -149,9 +149,8 @@ class MAX7219:
             my_spi_device.write(bytearray([cmd, data]))
 
             # send Noop to all before number, if you want to know why, please ref to MAX7219.pdf.
-            for i in range(0, number - 1):
+            for _ in range(0, number - 1):
                 my_spi_device.write(bytearray([0, 0]))
-                i = i - i
 
     def rotation(self, direction):
         """
