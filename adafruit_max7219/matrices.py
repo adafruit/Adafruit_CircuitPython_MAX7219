@@ -81,11 +81,19 @@ class CustomMatrix(max7219.ChainableMAX7219):
 
     def _calculate_y_coordinate_offsets(self):
         y_chunks = []
-        for _ in range((self.chain_length * 8) // self.width):
+        for _ in range(self.chain_length // (self.width // 8)):
             y_chunks.append([])
+        chunk = 0
+        chunk_size = 0
         for index in range(self.chain_length * 8):
-            chunk = index % ((self.chain_length * 8) // self.width)
             y_chunks[chunk].append(index)
+            chunk_size += 1
+            if chunk_size >= (self.width // 8):
+                chunk_size = 0
+                chunk += 1
+                if chunk >= len(y_chunks):
+                    chunk = 0
+
         y_index = []
         for chunk in y_chunks:
             y_index += chunk
@@ -131,6 +139,5 @@ class CustomMatrix(max7219.ChainableMAX7219):
         """
 
         buffer_y = xpos // 8 + self.y_index[ypos * self.y_offset]
-        buffer_x = xpos % 8
-
+        buffer_x = (xpos - ((xpos // 8) * 8)) % 8
         return super().pixel(buffer_x, buffer_y, bit_value=bit_value)
