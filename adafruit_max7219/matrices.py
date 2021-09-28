@@ -11,6 +11,7 @@ from adafruit_max7219 import max7219
 
 try:
     # Used only for typing
+    import typing  # pylint: disable=unused-import
     import digitalio
     import busio
 except ImportError:

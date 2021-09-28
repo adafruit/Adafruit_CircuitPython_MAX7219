@@ -45,6 +45,7 @@ import adafruit_framebuf as framebuf
 
 try:
     # Used only for typing
+    import typing  # pylint: disable=unused-import
     import busio
 except ImportError:
     pass
