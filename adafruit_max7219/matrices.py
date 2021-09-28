@@ -9,6 +9,12 @@
 from micropython import const
 from adafruit_max7219 import max7219
 
+try:
+    import digitalio
+    import busio
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_MAX7219.git"
 
@@ -22,14 +28,14 @@ class Matrix8x8(max7219.MAX7219):
     """
     Driver for a 8x8 LED matrix based on the MAX7219 chip.
 
-    :param object spi: an spi busio or spi bitbangio object
+    :param ~busio.SPI spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
     """
 
-    def __init__(self, spi, cs):
+    def __init__(self, spi: busio.SPI, cs: digitalio.DigitalInOut):
         super().__init__(8, 8, spi, cs)
 
-    def init_display(self):
+    def init_display(self) -> None:
         for cmd, data in (
             (_SHUTDOWN, 0),
             (_DISPLAYTEST, 0),
@@ -42,18 +48,18 @@ class Matrix8x8(max7219.MAX7219):
         self.fill(0)
         self.show()
 
-    def text(self, strg, xpos, ypos, bit_value=1):
+    def text(self, strg: str, xpos: int, ypos: int, bit_value: int = 1) -> None:
         """
         Draw text in the 8x8 matrix.
 
+        :param str strg: string to place in to display
         :param int xpos: x position of LED in matrix
         :param int ypos: y position of LED in matrix
-        :param string strg: string to place in to display
-        :param bit_value: > 1 sets the text, otherwise resets
+        :param int bit_value: > 1 sets the text, otherwise resets
         """
         self.framebuf.text(strg, xpos, ypos, bit_value)
 
-    def clear_all(self):
+    def clear_all(self) -> None:
         """
         Clears all matrix leds.
         """
