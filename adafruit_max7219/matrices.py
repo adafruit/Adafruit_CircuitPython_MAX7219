@@ -10,6 +10,7 @@ from micropython import const
 from adafruit_max7219 import max7219
 
 try:
+    # Used only for typing
     import digitalio
     import busio
 except ImportError:

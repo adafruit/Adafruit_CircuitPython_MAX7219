@@ -44,6 +44,7 @@ from micropython import const
 import adafruit_framebuf as framebuf
 
 try:
+    # Used only for typing
     import busio
 except ImportError:
     pass

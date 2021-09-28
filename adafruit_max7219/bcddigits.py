@@ -10,9 +10,10 @@ from micropython import const
 from adafruit_max7219 import max7219
 
 try:
+    # Used only for typing
+    from typing import List
     import digitalio
     import busio
-    from typing import List
 except ImportError:
     pass
 
