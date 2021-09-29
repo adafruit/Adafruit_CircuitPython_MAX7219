@@ -146,9 +146,13 @@ class MAX7219:
         """
         self.framebuf.scroll(delta_x, delta_y)
 
-    def write_cmd(self, cmd, data) -> None:
-        # pylint: disable=no-member
-        """Writes a command to spi device."""
+    def write_cmd(self, cmd: int, data: int) -> None:
+        """
+        Writes a command to spi device.
+
+        :param int cmd: register address to write data to
+        :param int data: data to be written to commanded register
+        """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
