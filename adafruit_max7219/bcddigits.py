@@ -9,6 +9,14 @@
 from micropython import const
 from adafruit_max7219 import max7219
 
+try:
+    # Used only for typing
+    from typing import List
+    import digitalio
+    import busio
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_MAX7219.git"
 
@@ -23,16 +31,16 @@ class BCDDigits(max7219.MAX7219):
     Basic support for display on a 7-Segment BCD display controlled
     by a Max7219 chip using SPI.
 
-    :param object spi: an spi busio or spi bitbangio object
+    :param ~busio.SPI spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
     :param int nDigits: number of led 7-segment digits; default 1; max 8
     """
 
-    def __init__(self, spi, cs, nDigits=1):
+    def __init__(self, spi: busio.SPI, cs: digitalio.DigitalInOut, nDigits: int = 1):
         self._ndigits = nDigits
         super().__init__(self._ndigits, 8, spi, cs)
 
-    def init_display(self):
+    def init_display(self) -> None:
 
         for cmd, data in (
             (_SHUTDOWN, 0),
@@ -46,7 +54,7 @@ class BCDDigits(max7219.MAX7219):
         self.clear_all()
         self.show()
 
-    def set_digit(self, dpos, value):
+    def set_digit(self, dpos: int, value: int) -> None:
         """
         Display one digit.
 
@@ -59,30 +67,30 @@ class BCDDigits(max7219.MAX7219):
             self.pixel(dpos, i, value & 0x01)
             value >>= 1
 
-    def set_digits(self, start, values):
+    def set_digits(self, start: int, values: List[int]) -> None:
         """
         Display digits from a list.
 
-        :param int s: digit to start display zero-based
-        :param list ds: list of integer values ranging from 0->15
+        :param int start: digit to start display zero-based
+        :param list[int] values: list of integer values ranging from 0->15
         """
         for value in values:
             # print('set digit {} start {}'.format(d,start))
             self.set_digit(start, value)
             start += 1
 
-    def show_dot(self, dpos, bit_value=None):
+    def show_dot(self, dpos: int, bit_value: int = None) -> None:
         """
         The decimal point for a digit.
 
         :param int dpos: the digit to set the decimal point zero-based
-        :param int value: value > zero lights the decimal point, else unlights the point
+        :param int bit_value: value > zero lights the decimal point, else unlights the point
         """
         if 0 <= dpos < self._ndigits:
             # print('set dot {} = {}'.format((self._ndigits - d -1),col))
             self.pixel(self._ndigits - dpos - 1, 7, bit_value)
 
-    def clear_all(self):
+    def clear_all(self) -> None:
         """
         Clear all digits and decimal points.
         """
@@ -90,12 +98,12 @@ class BCDDigits(max7219.MAX7219):
         for i in range(self._ndigits):
             self.show_dot(i)
 
-    def show_str(self, start, strg):
+    def show_str(self, start: int, strg: str) -> None:
         """
         Displays a numeric str in the display.  Shows digits ``0-9``, ``-``, and ``.``.
 
         :param int start: start position to show the numeric string
-        :param string str: the numeric string
+        :param str strg: the numeric string
         """
         cpos = start
         for char in strg:
@@ -111,7 +119,7 @@ class BCDDigits(max7219.MAX7219):
             self.set_digit(cpos, value)
             cpos += 1
 
-    def show_help(self, start):
+    def show_help(self, start: int) -> None:
         """
         Display the word HELP in the display.
 
