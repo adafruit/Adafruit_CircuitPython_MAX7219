@@ -37,11 +37,18 @@ Implementation Notes
 **Notes:**
 #.  Datasheet: https://cdn-shop.adafruit.com/datasheets/MAX7219.pdf
 """
-# MicroPython SSD1306 OLED driver, I2C and SPI interfaces
+# MicroPython MAX7219 driver, SPI interfaces
 import digitalio
 from adafruit_bus_device import spi_device
 from micropython import const
 import adafruit_framebuf as framebuf
+
+try:
+    # Used only for typing
+    import typing  # pylint: disable=unused-import
+    import busio
+except ImportError:
+    pass
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_MAX7219.git"
@@ -57,15 +64,23 @@ class MAX7219:
 
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
-    :param object spi: an spi busio or spi bitbangio object
+    :param ~busio.SPI spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut chip_select: digital in/out to use as chip select signal
-    :param baudrate: for SPIDevice baudrate (default 8000000)
-    :param polarity: for SPIDevice polarity (default 0)
-    :param phase: for SPIDevice phase (default 0)
+    :param int baudrate: for SPIDevice baudrate (default 8000000)
+    :param int polarity: for SPIDevice polarity (default 0)
+    :param int phase: for SPIDevice phase (default 0)
     """
 
     def __init__(
-        self, width, height, spi, cs, *, baudrate=8000000, polarity=0, phase=0
+        self,
+        width: int,
+        height: int,
+        spi: busio.SPI,
+        cs: digitalio.DigitalInOut,
+        *,
+        baudrate: int = 8000000,
+        polarity: int = 0,
+        phase: int = 0
     ):
 
         self._chip_select = cs
@@ -83,10 +98,10 @@ class MAX7219:
 
         self.init_display()
 
-    def init_display(self):
+    def init_display(self) -> None:
         """Must be implemented by derived class (``matrices``, ``bcddigits``)"""
 
-    def brightness(self, value):
+    def brightness(self, value: int) -> None:
         """
         Controls the brightness of the display.
 
@@ -96,14 +111,14 @@ class MAX7219:
             raise ValueError("Brightness out of range")
         self.write_cmd(_INTENSITY, value)
 
-    def show(self):
+    def show(self) -> None:
         """
         Updates the display.
         """
         for ypos in range(8):
             self.write_cmd(_DIGIT0 + ypos, self._buffer[ypos])
 
-    def fill(self, bit_value):
+    def fill(self, bit_value: int) -> None:
         """
         Fill the display buffer.
 
@@ -111,24 +126,33 @@ class MAX7219:
         """
         self.framebuf.fill(bit_value)
 
-    def pixel(self, xpos, ypos, bit_value=None):
+    def pixel(self, xpos: int, ypos: int, bit_value: int = None) -> None:
         """
         Set one buffer bit
 
-        :param xpos: x position to set bit
-        :param ypos: y position to set bit
+        :param int xpos: x position to set bit
+        :param int ypos: y position to set bit
         :param int bit_value: value > 0 sets the buffer bit, else clears the buffer bit
         """
         bit_value = 0x01 if bit_value else 0x00
         self.framebuf.pixel(xpos, ypos, bit_value)
 
-    def scroll(self, delta_x, delta_y):
-        """Srcolls the display using delta_x,delta_y."""
+    def scroll(self, delta_x: int, delta_y: int) -> None:
+        """
+        Srcolls the display using delta_x,delta_y.
+
+        :param int delta_x: positions to scroll in the x direction
+        :param int delta_y: positions to scroll in the y direction
+        """
         self.framebuf.scroll(delta_x, delta_y)
 
-    def write_cmd(self, cmd, data):
-        # pylint: disable=no-member
-        """Writes a command to spi device."""
+    def write_cmd(self, cmd: int, data: int) -> None:
+        """
+        Writes a command to spi device.
+
+        :param int cmd: register address to write data to
+        :param int data: data to be written to commanded register
+        """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
