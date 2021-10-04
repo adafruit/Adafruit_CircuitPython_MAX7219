@@ -165,15 +165,23 @@ class ChainableMAX7219(MAX7219):
 
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
-    :param object spi: an spi busio or spi bitbangio object
+    :param ~busio.SPI spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut chip_select: digital in/out to use as chip select signal
-    :param baudrate: for SPIDevice baudrate (default 8000000)
-    :param polarity: for SPIDevice polarity (default 0)
-    :param phase: for SPIDevice phase (default 0)
+    :param int baudrate: for SPIDevice baudrate (default 8000000)
+    :param int polarity: for SPIDevice polarity (default 0)
+    :param int phase: for SPIDevice phase (default 0)
     """
 
     def __init__(
-        self, width, height, spi, cs, *, baudrate=8000000, polarity=0, phase=0
+        self,
+        width: int,
+        height: int,
+        spi: busio.SPI,
+        cs: digitalio.DigitalInOut,
+        *,
+        baudrate: int = 8000000,
+        polarity: int = 0,
+        phase: int = 0
     ):
         self.chain_length = (height // 8) * (width // 8)
 
@@ -183,16 +191,20 @@ class ChainableMAX7219(MAX7219):
         self._buffer = bytearray(self.chain_length * 8)
         self.framebuf = framebuf.FrameBuffer1(self._buffer, self.chain_length * 8, 8)
 
-    def write_cmd(self, cmd, data):
-        # pylint: disable=no-member
-        """Writes a command to spi device."""
+    def write_cmd(self, cmd: int, data: int) -> None:
+        """
+        Writes a command to spi device.
+
+        :param int cmd: register address to write data to
+        :param int data: data to be written to commanded register
+        """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
             for _ in range(self.chain_length):
                 my_spi_device.write(bytearray([cmd, data]))
 
-    def show(self):
+    def show(self) -> None:
         """
         Updates the display.
         """

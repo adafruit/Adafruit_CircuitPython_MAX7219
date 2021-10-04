@@ -72,14 +72,22 @@ class CustomMatrix(max7219.ChainableMAX7219):
     """
     Driver for a custom 8x8 LED matrix constellation based on daisy chained MAX7219 chips.
 
-    :param object spi: an spi busio or spi bitbangio object
+    :param ~busio.SPI spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
     :param int rotation: the number of times to rotate the coordinate system (default 1)
     """
 
-    def __init__(self, spi, cs, width, height, *, rotation=1):
+    def __init__(
+        self,
+        spi: busio.SPI,
+        cs: digitalio.DigitalInOut,
+        width: int,
+        height: int,
+        *,
+        rotation: int = 1
+    ):
         super().__init__(width, height, spi, cs)
 
         self.y_offset = width // 8
@@ -87,7 +95,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
 
         self.framebuf.rotation = rotation
 
-    def _calculate_y_coordinate_offsets(self):
+    def _calculate_y_coordinate_offsets(self) -> None:
         y_chunks = []
         for _ in range(self.chain_length // (self.width // 8)):
             y_chunks.append([])
@@ -107,7 +115,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
             y_index += chunk
         return y_index
 
-    def init_display(self):
+    def init_display(self) -> None:
         for cmd, data in (
             (_SHUTDOWN, 0),
             (_DISPLAYTEST, 0),
@@ -120,29 +128,29 @@ class CustomMatrix(max7219.ChainableMAX7219):
         self.fill(0)
         self.show()
 
-    def text(self, strg, xpos, ypos, bit_value=1):
+    def text(self, strg: str, xpos: int, ypos: int, bit_value: int = 1) -> None:
         """
-        Draw text in the 8x8 matrix.
+        Draw text in the matrix.
 
+        :param str strg: string to place in to display
         :param int xpos: x position of LED in matrix
         :param int ypos: y position of LED in matrix
-        :param string strg: string to place in to display
-        :param bit_value: > 1 sets the text, otherwise resets
+        :param int bit_value: > 1 sets the text, otherwise resets
         """
         self.framebuf.text(strg, xpos, ypos, bit_value)
 
-    def clear_all(self):
+    def clear_all(self) -> None:
         """
         Clears all matrix leds.
         """
         self.fill(0)
 
-    def pixel(self, xpos, ypos, bit_value=None):
+    def pixel(self, xpos: int, ypos: int, bit_value: int = None) -> None:
         """
         Set one buffer bit
 
-        :param xpos: x position to set bit
-        :param ypos: y position to set bit
+        :param int xpos: x position to set bit
+        :param int ypos: y position to set bit
         :param int bit_value: value > 0 sets the buffer bit, else clears the buffer bit
         """
 
