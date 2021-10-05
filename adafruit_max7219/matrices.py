@@ -7,11 +7,12 @@
 ====================================================
 """
 from micropython import const
+from adafruit_framebuf import BitmapFont
 from adafruit_max7219 import max7219
 
 try:
     # Used only for typing
-    import typing  # pylint: disable=unused-import
+    from typing import Tuple
     import digitalio
     import busio
 except ImportError:
@@ -94,6 +95,8 @@ class CustomMatrix(max7219.ChainableMAX7219):
         self.y_index = self._calculate_y_coordinate_offsets()
 
         self.framebuf.rotation = rotation
+        self.framebuf.fill_rect = self._fill_rect
+        self._font = None
 
     def _calculate_y_coordinate_offsets(self) -> None:
         y_chunks = []
@@ -142,7 +145,98 @@ class CustomMatrix(max7219.ChainableMAX7219):
         :param int ypos: y position to set bit
         :param int bit_value: value > 0 sets the buffer bit, else clears the buffer bit
         """
-
-        buffer_y = xpos // 8 + self.y_index[ypos * self.y_offset]
-        buffer_x = (xpos - ((xpos // 8) * 8)) % 8
+        buffer_x, buffer_y = self._pixel_coords_to_framebuf_coords(xpos, ypos)
         return super().pixel(buffer_x, buffer_y, bit_value=bit_value)
+
+    def _pixel_coords_to_framebuf_coords(self, xpos: int, ypos: int) -> Tuple[int]:
+        """
+        Convert matrix pixel coordinates into coordinates in the framebuffer
+
+        :param int xpos: x position
+        :param int ypos: y position
+        :return: framebuffer coordinates (x, y)
+        :rtype: Tuple[int]
+        """
+        return (xpos - ((xpos // 8) * 8)) % 8, xpos // 8 + self.y_index[
+            ypos * self.y_offset
+        ]
+
+    def rect(
+        self, x: int, y: int, width: int, height: int, color: int, fill: bool = False
+    ) -> None:
+        """
+        Draw a rectangle at the given position of the given size, color, and fill.
+
+        :param int x: x position
+        :param int y: y position
+        :param int width: width of rectangle
+        :param int height: height of rectangle
+        :param int color: color of rectangle
+        :param bool fill: 1 pixel outline or filled rectangle (default: False)
+        """
+        # pylint: disable=too-many-arguments
+        for row in range(height):
+            y_pos = row + y
+            for col in range(width):
+                x_pos = col + x
+                if fill:
+                    self.pixel(x_pos, y_pos, color)
+                elif y_pos in (y, y + height - 1) or x_pos in (x, x + width - 1):
+                    self.pixel(x_pos, y_pos, color)
+                else:
+                    continue
+
+    def _fill_rect(self, x: int, y: int, width: int, height: int, color: int) -> None:
+        """
+        Draw a filled rectangle at the given position of the given size, color.
+
+        :param int x: x position
+        :param int y: y position
+        :param int width: width of rectangle
+        :param int height: height of rectangle
+        :param int color: color of rectangle
+        """
+        # pylint: disable=too-many-arguments
+        return self.rect(x, y, width, height, color, True)
+
+    # Adafruit Circuit Python Framebuf Text Function
+    # Authors: Kattni Rembor, Melissa LeBlanc-Williams and Tony DiCola, for Adafruit Industries
+    # License: MIT License (https://opensource.org/licenses/MIT)
+    def text(
+        self,
+        strg: str,
+        xpos: int,
+        ypos: int,
+        color: int = 1,
+        *,
+        font_name: str = "font5x8.bin",
+        size: int = 1
+    ) -> None:
+        """
+        Draw text in the matrix.
+
+        :param str strg: string to place in to display
+        :param int xpos: x position of LED in matrix
+        :param int ypos: y position of LED in matrix
+        :param int color: > 1 sets the text, otherwise resets
+        :param str font_name: path to binary font file (default: "font5x8.bin")
+        :param int size: size of the font, acts as a multiplier
+        """
+        for chunk in strg.split("\n"):
+            if not self._font or self._font.font_name != font_name:
+                # load the font!
+                self._font = BitmapFont(font_name)
+            width = self._font.font_width
+            height = self._font.font_height
+            for i, char in enumerate(chunk):
+                char_x = xpos + (i * (width + 1)) * size
+                if (
+                    char_x + (width * size) > 0
+                    and char_x < self.width
+                    and ypos + (height * size) > 0
+                    and ypos < self.height
+                ):
+                    self._font.draw_char(
+                        char, char_x, ypos, self.framebuf, color, size=size
+                    )
+            ypos += height * size
