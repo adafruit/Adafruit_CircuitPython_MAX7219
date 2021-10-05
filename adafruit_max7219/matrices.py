@@ -128,17 +128,6 @@ class CustomMatrix(max7219.ChainableMAX7219):
         self.fill(0)
         self.show()
 
-    def text(self, strg: str, xpos: int, ypos: int, bit_value: int = 1) -> None:
-        """
-        Draw text in the matrix.
-
-        :param str strg: string to place in to display
-        :param int xpos: x position of LED in matrix
-        :param int ypos: y position of LED in matrix
-        :param int bit_value: > 1 sets the text, otherwise resets
-        """
-        self.framebuf.text(strg, xpos, ypos, bit_value)
-
     def clear_all(self) -> None:
         """
         Clears all matrix leds.
