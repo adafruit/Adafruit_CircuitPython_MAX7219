@@ -4,8 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-`adafruit_max7219.matrices.Matrix8x8`
-`adafruit_max7219.matrices.CustomMatrix`
+`adafruit_max7219.matrices`
 ====================================================
 """
 from micropython import const
