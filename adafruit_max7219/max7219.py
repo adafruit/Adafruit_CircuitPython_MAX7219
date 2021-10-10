@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2016 Philip R. Moyer  for Adafruit Industries
 # SPDX-FileCopyrightText: 2016 Radomir Dopieralski for Adafruit Industries
+# SPDX-FileCopyrightText: 2021 Daniel Flanagan
 #
 # SPDX-License-Identifier: MIT
 
@@ -13,6 +14,7 @@ either an 8x8 matrix or a 8 digit 7-segment numeric display.
 See Also
 =========
 * matrices.Maxtrix8x8 is a class support an 8x8 led matrix display
+* matrices.CustomMatrix is a class support a custom sized constellation of 8x8 led matrix displays
 * bcddigits.BCDDigits is a class that support the 8 digit 7-segment display
 
 Beware that most CircuitPython compatible hardware are 3.3v logic level! Make
@@ -60,7 +62,7 @@ _INTENSITY = const(10)
 
 class MAX7219:
     """
-    MAX2719 - driver for displays based on max719 chip_select
+    MAX7219 - driver for displays based on max7219 chip_select
 
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
@@ -161,7 +163,7 @@ class MAX7219:
 
 class ChainableMAX7219(MAX7219):
     """
-    Daisy Chainable MAX2719 - driver for cascading displays based on max719 chip_select
+    Daisy Chainable MAX7219 - driver for cascading displays based on max7219 chip_select
 
     :param int width: the number of pixels wide
     :param int height: the number of pixels high

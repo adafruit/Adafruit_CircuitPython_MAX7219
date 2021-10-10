@@ -1,9 +1,11 @@
 # SPDX-FileCopyrightText: 2017 Dan Halbert for Adafruit Industries
+# SPDX-FileCopyrightText: 2021 Daniel Flanagan
 #
 # SPDX-License-Identifier: MIT
 
 """
 `adafruit_max7219.matrices.Matrix8x8`
+`adafruit_max7219.matrices.CustomMatrix`
 ====================================================
 """
 from micropython import const
@@ -137,6 +139,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
         """
         self.fill(0)
 
+    # pylint: disable=inconsistent-return-statements
     def pixel(self, xpos: int, ypos: int, bit_value: int = None) -> None:
         """
         Set one buffer bit
@@ -145,6 +148,8 @@ class CustomMatrix(max7219.ChainableMAX7219):
         :param int ypos: y position to set bit
         :param int bit_value: value > 0 sets the buffer bit, else clears the buffer bit
         """
+        if xpos < 0 or ypos < 0 or xpos >= self.width or ypos >= self.height:
+            return
         buffer_x, buffer_y = self._pixel_coords_to_framebuf_coords(xpos, ypos)
         return super().pixel(buffer_x, buffer_y, bit_value=bit_value)
 

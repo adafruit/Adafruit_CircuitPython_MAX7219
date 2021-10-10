@@ -10,3 +10,7 @@ Ensure your device works with this simple test.
 .. literalinclude:: ../examples/max7219_showbcddigits.py
     :caption: examples/max7219_showbcddigits.py
     :linenos:
+
+.. literalinclude:: ../examples/max7219_custommatrixtest.py
+    :caption: examples/max7219_custommatrixtest.py
+    :linenos:
