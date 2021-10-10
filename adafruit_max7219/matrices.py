@@ -161,6 +161,52 @@ class CustomMatrix(max7219.ChainableMAX7219):
             ypos * self.y_offset
         ]
 
+    def _get_pixel(self, xpos: int, ypos: int) -> int:
+        """
+        Get value of a matrix pixel
+
+        :param int xpos: x position
+        :param int ypos: y position
+        :return: value of pixel in matrix
+        :rtype: int
+        """
+        x, y = self._pixel_coords_to_framebuf_coords(xpos, ypos)
+        buffer_value = self._buffer[-1 * y - 1]
+        return ((buffer_value & 2 ** x) >> x) & 1
+
+    # Adafruit Circuit Python Framebuf Scroll Function
+    # Authors: Kattni Rembor, Melissa LeBlanc-Williams and Tony DiCola, for Adafruit Industries
+    # License: MIT License (https://opensource.org/licenses/MIT)
+    def scroll(self, delta_x: int, delta_y: int) -> None:
+        """
+        Srcolls the display using delta_x, delta_y.
+
+        :param int delta_x: positions to scroll in the x direction
+        :param int delta_y: positions to scroll in the y direction
+        """
+        if delta_x < 0:
+            shift_x = 0
+            xend = self.width + delta_x
+            dt_x = 1
+        else:
+            shift_x = self.width - 1
+            xend = delta_x - 1
+            dt_x = -1
+        if delta_y < 0:
+            y = 0
+            yend = self.height + delta_y
+            dt_y = 1
+        else:
+            y = self.height - 1
+            yend = delta_y - 1
+            dt_y = -1
+        while y != yend:
+            x = shift_x
+            while x != xend:
+                self.pixel(x, y, self._get_pixel(x - delta_x, y - delta_y))
+                x += dt_x
+            y += dt_y
+
     def rect(
         self, x: int, y: int, width: int, height: int, color: int, fill: bool = False
     ) -> None:
