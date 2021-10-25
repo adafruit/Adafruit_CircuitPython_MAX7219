@@ -113,6 +113,11 @@ adafruit_max7219.BCDDigits Example
       display.show_str(0,'{:9.2f}'.format(-1234.56))
       display.show()
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/max7219/en/latest/>`_.
+
 Contributing
 ============
 
