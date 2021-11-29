@@ -6,10 +6,8 @@
 `adafruit_max7219.matrices.Matrix8x8`
 ====================================================
 """
-import time
 from micropython import const
 from adafruit_max7219 import max7219
-
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_MAX7219.git"
@@ -28,8 +26,8 @@ class Matrix8x8(max7219.MAX7219):
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
     """
 
-    def __init__(self, spi, cs, num=1):
-        super().__init__(8, 8, spi, cs, num=num)
+    def __init__(self, spi, cs):
+        super().__init__(8, 8, spi, cs)
 
     def init_display(self):
         for cmd, data in (
@@ -39,7 +37,7 @@ class Matrix8x8(max7219.MAX7219):
             (_DECODEMODE, 0),
             (_SHUTDOWN, 1),
         ):
-            self._write([cmd, data] * self.num)
+            self.write_cmd(cmd, data)
 
         self.fill(0)
         self.show()
@@ -60,20 +58,3 @@ class Matrix8x8(max7219.MAX7219):
         Clears all matrix leds.
         """
         self.fill(0)
-
-    def display_str(self, data, delay=1):
-        """
-        Display string on led matrix by matrix length
-
-        :param str: string that can be of any length.
-        :param delay: transfer time from one screen to  another screen. default value is 1s
-
-        """
-        i = -1
-        for char in data:
-            i += 1
-            self.fill(0)
-            self.text(char, 1, 0)
-            self.show_char_position(i % self.num)
-            if i % self.num == self.num - 1:
-                time.sleep(delay)
