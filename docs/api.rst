@@ -3,6 +3,7 @@
 
 .. automodule:: adafruit_max7219.max7219
    :members:
+   :show-inheritance:
 
 .. automodule:: adafruit_max7219.matrices
    :members:

@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2016 Philip R. Moyer  for Adafruit Industries
 # SPDX-FileCopyrightText: 2016 Radomir Dopieralski for Adafruit Industries
+# SPDX-FileCopyrightText: 2021 Daniel Flanagan
 #
 # SPDX-License-Identifier: MIT
 
@@ -13,6 +14,7 @@ either an 8x8 matrix or a 8 digit 7-segment numeric display.
 See Also
 =========
 * matrices.Maxtrix8x8 is a class support an 8x8 led matrix display
+* matrices.CustomMatrix is a class support a custom sized constellation of 8x8 led matrix displays
 * bcddigits.BCDDigits is a class that support the 8 digit 7-segment display
 
 Beware that most CircuitPython compatible hardware are 3.3v logic level! Make
@@ -60,7 +62,7 @@ _INTENSITY = const(10)
 
 class MAX7219:
     """
-    MAX2719 - driver for displays based on max719 chip_select
+    MAX7219 - driver for displays based on max7219 chip_select
 
     :param int width: the number of pixels wide
     :param int height: the number of pixels high
@@ -157,3 +159,66 @@ class MAX7219:
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
             my_spi_device.write(bytearray([cmd, data]))
+
+
+class ChainableMAX7219(MAX7219):
+    """
+    Daisy Chainable MAX7219 - driver for cascading displays based on max7219 chip_select
+
+    :param int width: the number of pixels wide
+    :param int height: the number of pixels high
+    :param ~busio.SPI spi: an spi busio or spi bitbangio object
+    :param ~digitalio.DigitalInOut chip_select: digital in/out to use as chip select signal
+    :param int baudrate: for SPIDevice baudrate (default 8000000)
+    :param int polarity: for SPIDevice polarity (default 0)
+    :param int phase: for SPIDevice phase (default 0)
+    """
+
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        spi: busio.SPI,
+        cs: digitalio.DigitalInOut,
+        *,
+        baudrate: int = 8000000,
+        polarity: int = 0,
+        phase: int = 0
+    ):
+        self.chain_length = (height // 8) * (width // 8)
+
+        super().__init__(
+            width, height, spi, cs, baudrate=baudrate, polarity=polarity, phase=phase
+        )
+        self._buffer = bytearray(self.chain_length * 8)
+        self.framebuf = framebuf.FrameBuffer1(self._buffer, self.chain_length * 8, 8)
+
+    def write_cmd(self, cmd: int, data: int) -> None:
+        """
+        Writes a command to spi device.
+
+        :param int cmd: register address to write data to
+        :param int data: data to be written to commanded register
+        """
+        # print('cmd {} data {}'.format(cmd,data))
+        self._chip_select.value = False
+        with self._spi_device as my_spi_device:
+            for _ in range(self.chain_length):
+                my_spi_device.write(bytearray([cmd, data]))
+
+    def show(self) -> None:
+        """
+        Updates the display.
+        """
+        for ypos in range(8):
+            self._chip_select.value = False
+            with self._spi_device as my_spi_device:
+                for chip in range(self.chain_length):
+                    my_spi_device.write(
+                        bytearray(
+                            [
+                                _DIGIT0 + ypos,
+                                self._buffer[ypos * self.chain_length + chip],
+                            ]
+                        )
+                    )
