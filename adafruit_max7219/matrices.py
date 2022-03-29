@@ -176,7 +176,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
         """
         x, y = self._pixel_coords_to_framebuf_coords(xpos, ypos)
         buffer_value = self._buffer[-1 * y - 1]
-        return ((buffer_value & 2 ** x) >> x) & 1
+        return ((buffer_value & 2**x) >> x) & 1
 
     # Adafruit Circuit Python Framebuf Scroll Function
     # Authors: Kattni Rembor, Melissa LeBlanc-Williams and Tony DiCola, for Adafruit Industries

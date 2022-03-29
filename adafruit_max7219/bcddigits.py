@@ -46,7 +46,7 @@ class BCDDigits(max7219.MAX7219):
             (_SHUTDOWN, 0),
             (_DISPLAYTEST, 0),
             (_SCANLIMIT, 7),
-            (_DECODEMODE, (2 ** self._ndigits) - 1),
+            (_DECODEMODE, (2**self._ndigits) - 1),
             (_SHUTDOWN, 1),
         ):
             self.write_cmd(cmd, data)
