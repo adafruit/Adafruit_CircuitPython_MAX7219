@@ -26,14 +26,15 @@ _SHUTDOWN = const(12)
 _DISPLAYTEST = const(15)
 
 
-class BCDDigits(max7219.MAX7219):
+class BCDDigits(max7219.ChainableMAX7219):
     """
     Basic support for display on a 7-Segment BCD display controlled
     by a Max7219 chip using SPI.
 
     :param ~busio.SPI spi: an spi busio or spi bitbangio object
     :param ~digitalio.DigitalInOut cs: digital in/out to use as chip select signal
-    :param int nDigits: number of led 7-segment digits; default 1; max 8
+    :param int nDigits: number of led 7-segment digits; default 1; max 8 if one
+        MAX7219; max 16 if two MAX7219 are chained together
     """
 
     def __init__(self, spi: busio.SPI, cs: digitalio.DigitalInOut, nDigits: int = 1):
@@ -61,6 +62,15 @@ class BCDDigits(max7219.MAX7219):
         :param int dpos: the digit position; zero-based
         :param int value: integer ranging from 0->15
         """
+
+        if not 0 <= dpos < self.chain_length * 8:
+            raise ValueError(
+                "Digit with index {0} cannot be set with only {1} MAX7219(s)".format(
+                    dpos,
+                    self.chain_length,
+                )
+            )
+
         dpos = self._ndigits - dpos - 1
         for i in range(4):
             # print('digit {} pixel {} value {}'.format(dpos,i+4,v & 0x01))
