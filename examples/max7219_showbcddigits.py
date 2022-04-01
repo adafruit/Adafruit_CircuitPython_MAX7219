@@ -3,16 +3,14 @@
 
 import time
 import random
-from board import TX, RX, A1
-import busio
+import board
 import digitalio
 from adafruit_max7219 import bcddigits
 
-mosi = TX
-clk = RX
-cs = digitalio.DigitalInOut(A1)
 
-spi = busio.SPI(clk, MOSI=mosi)
+# You may need to change the chip select pin depending on your wiring
+spi = board.SPI()
+cs = digitalio.DigitalInOut(board.D4)
 
 leds = bcddigits.BCDDigits(spi, cs, nDigits=8)
 while True:

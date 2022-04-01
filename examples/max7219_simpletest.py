@@ -2,16 +2,14 @@
 # SPDX-License-Identifier: MIT
 
 import time
-from board import TX, RX, A1
-import busio
+import board
 import digitalio
 from adafruit_max7219 import matrices
 
-mosi = TX
-clk = RX
-cs = digitalio.DigitalInOut(A1)
 
-spi = busio.SPI(clk, MOSI=mosi)
+# You may need to change the chip select pin depending on your wiring
+spi = board.SPI()
+cs = digitalio.DigitalInOut(board.D4)
 
 matrix = matrices.Matrix8x8(spi, cs)
 while True:
