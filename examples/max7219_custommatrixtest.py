@@ -3,16 +3,13 @@
 
 import time
 import board
-import busio
 import digitalio
 from adafruit_max7219 import matrices
 
-# You may need to change the chip select board depending on your wiring
-mosi = board.MOSI
-clk = board.CLK
-cs = digitalio.DigitalInOut(board.D4)
 
-spi = busio.SPI(clk, MOSI=mosi)
+# You may need to change the chip select board depending on your wiring
+spi = board.SPI()
+cs = digitalio.DigitalInOut(board.D4)
 
 matrix = matrices.CustomMatrix(spi, cs, 32, 8)
 while True:

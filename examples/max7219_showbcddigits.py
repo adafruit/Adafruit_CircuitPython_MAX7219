@@ -8,12 +8,10 @@ import busio
 import digitalio
 from adafruit_max7219 import bcddigits
 
-# You may need to change the chip select board depending on your wiring
-mosi = board.MOSI
-clk = board.CLK
-cs = digitalio.DigitalInOut(board.D4)
 
-spi = busio.SPI(clk, MOSI=mosi)
+# You may need to change the chip select board depending on your wiring
+spi = board.SPI()
+cs = digitalio.DigitalInOut(board.D4)
 
 leds = bcddigits.BCDDigits(spi, cs, nDigits=8)
 while True:
