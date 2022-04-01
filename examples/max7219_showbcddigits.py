@@ -8,7 +8,7 @@ import digitalio
 from adafruit_max7219 import bcddigits
 
 
-# You may need to change the chip select board depending on your wiring
+# You may need to change the chip select pin depending on your wiring
 spi = board.SPI()
 cs = digitalio.DigitalInOut(board.D4)
 
