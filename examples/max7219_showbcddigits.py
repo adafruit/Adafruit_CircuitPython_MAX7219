@@ -4,7 +4,6 @@
 import time
 import random
 import board
-import busio
 import digitalio
 from adafruit_max7219 import bcddigits
 
