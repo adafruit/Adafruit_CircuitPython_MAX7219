@@ -194,7 +194,7 @@ class ChainableMAX7219(MAX7219):
         self.framebuf = framebuf.FrameBuffer1(self._buffer, self.chain_length * 8, 8)
 
     # pylint: disable=arguments-differ
-    def write_cmd(self, cmd: int, data: int, data_overflow: bool = False) -> None:
+    def write_cmd(self, cmd: int, data: int, *, data_overflow: bool = False) -> None:
         """
         Writes a command to spi device.
 
