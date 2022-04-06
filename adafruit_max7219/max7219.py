@@ -193,18 +193,24 @@ class ChainableMAX7219(MAX7219):
         self._buffer = bytearray(self.chain_length * 8)
         self.framebuf = framebuf.FrameBuffer1(self._buffer, self.chain_length * 8, 8)
 
-    def write_cmd(self, cmd: int, data: int) -> None:
+    # pylint: disable=arguments-differ
+    def write_cmd(self, cmd: int, data: int, data_overflow: bool = False) -> None:
         """
         Writes a command to spi device.
 
         :param int cmd: register address to write data to
         :param int data: data to be written to commanded register
+        :param bool data_overflow: if data is larger than byte, write byte
+            by byte in big-endian order
         """
         # print('cmd {} data {}'.format(cmd,data))
         self._chip_select.value = False
         with self._spi_device as my_spi_device:
-            for _ in range(self.chain_length):
-                my_spi_device.write(bytearray([cmd, data]))
+            for byte_num in range(1, self.chain_length + 1):
+                byte_data = data
+                if data_overflow:
+                    byte_data = data >> 8 * (self.chain_length - byte_num)
+                my_spi_device.write(bytearray([cmd, byte_data]))
 
     def show(self) -> None:
         """
