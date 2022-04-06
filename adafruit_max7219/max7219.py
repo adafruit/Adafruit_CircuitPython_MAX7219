@@ -210,6 +210,7 @@ class ChainableMAX7219(MAX7219):
                 byte_data = data
                 if data_overflow:
                     byte_data = data >> 8 * (self.chain_length - byte_num)
+                    byte_data &= 0xFF
                 my_spi_device.write(bytearray([cmd, byte_data]))
 
     def show(self) -> None:
