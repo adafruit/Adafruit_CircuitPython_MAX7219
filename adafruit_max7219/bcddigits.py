@@ -47,10 +47,10 @@ class BCDDigits(max7219.ChainableMAX7219):
             (_SHUTDOWN, 0),
             (_DISPLAYTEST, 0),
             (_SCANLIMIT, 7),
-            (_DECODEMODE, (2**self._ndigits) - 1),
-            (_SHUTDOWN, 1),
         ):
             self.write_cmd(cmd, data)
+        self.write_cmd(_DECODEMODE, (2**self._ndigits) - 1, data_overflow=True)
+        self.write_cmd(_SHUTDOWN, 1)
 
         self.clear_all()
         self.show()
