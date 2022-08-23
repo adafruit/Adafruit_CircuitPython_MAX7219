@@ -6,6 +6,7 @@
 
 import os
 import sys
+import datetime
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -45,6 +46,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Adafruit MAX7219 Library"
+current_year = str(datetime.datetime.now().year)
 copyright = "2017, Adafruit CiruitPython and Bundle contributors"
 author = "Michael McWethy"
 
