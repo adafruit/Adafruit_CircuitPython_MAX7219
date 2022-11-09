@@ -78,7 +78,7 @@ class MAX7219:
         width: int,
         height: int,
         spi: busio.SPI,
-        cs: digitalio.DigitalInOut,
+        cs: digitalio.DigitalInOut,  # pylint: disable=invalid-name
         *,
         baudrate: int = 8000000,
         polarity: int = 0,
