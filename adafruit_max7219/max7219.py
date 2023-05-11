@@ -84,7 +84,6 @@ class MAX7219:
         polarity: int = 0,
         phase: int = 0
     ):
-
         self._chip_select = cs
         self._chip_select.direction = digitalio.Direction.OUTPUT
 

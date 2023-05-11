@@ -41,7 +41,6 @@ class BCDDigits(max7219.MAX7219):
         super().__init__(self._ndigits, 8, spi, cs)
 
     def init_display(self) -> None:
-
         for cmd, data in (
             (_SHUTDOWN, 0),
             (_DISPLAYTEST, 0),
