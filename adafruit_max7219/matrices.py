@@ -52,7 +52,15 @@ class Matrix8x8(max7219.MAX7219):
         self.fill(0)
         self.show()
 
-    def text(self, strg: str, xpos: int, ypos: int, bit_value: int = 1) -> None:
+    def text(
+        self,
+        strg: str,
+        xpos: int,
+        ypos: int,
+        bit_value: int = 1,
+        *,
+        font_name: str = "font5x8.bin"
+    ) -> None:
         """
         Draw text in the 8x8 matrix.
 
@@ -60,8 +68,9 @@ class Matrix8x8(max7219.MAX7219):
         :param int xpos: x position of LED in matrix
         :param int ypos: y position of LED in matrix
         :param int bit_value: > 1 sets the text, otherwise resets
+        :param str font_name: path to binary font file (default: "font5x8.bin")
         """
-        self.framebuf.text(strg, xpos, ypos, bit_value)
+        self.framebuf.text(strg, xpos, ypos, bit_value, font_name=font_name)
 
     def clear_all(self) -> None:
         """
