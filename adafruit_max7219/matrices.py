@@ -68,7 +68,9 @@ class Matrix8x8(max7219.MAX7219):
         :param int xpos: x position of LED in matrix
         :param int ypos: y position of LED in matrix
         :param int bit_value: > 1 sets the text, otherwise resets
-        :param str font_name: path to binary font file (default: "font5x8.bin")
+        :param str font_name: path to binary font file (default: "font5x8.bin").
+          The font can only be set once, if you want a different font you must
+          re-initialize the matrix.
         """
         self.framebuf.text(strg, xpos, ypos, bit_value, font_name=font_name)
 
