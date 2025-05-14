@@ -39,15 +39,17 @@ Implementation Notes
 **Notes:**
 #.  Datasheet: https://cdn-shop.adafruit.com/datasheets/MAX7219.pdf
 """
+
 # MicroPython MAX7219 driver, SPI interfaces
+import adafruit_framebuf as framebuf
 import digitalio
 from adafruit_bus_device import spi_device
 from micropython import const
-import adafruit_framebuf as framebuf
 
 try:
     # Used only for typing
-    import typing  # pylint: disable=unused-import
+    import typing
+
     import busio
 except ImportError:
     pass
@@ -78,11 +80,11 @@ class MAX7219:
         width: int,
         height: int,
         spi: busio.SPI,
-        cs: digitalio.DigitalInOut,  # pylint: disable=invalid-name
+        cs: digitalio.DigitalInOut,
         *,
         baudrate: int = 8000000,
         polarity: int = 0,
-        phase: int = 0
+        phase: int = 0,
     ):
         self._chip_select = cs
         self._chip_select.direction = digitalio.Direction.OUTPUT
@@ -182,13 +184,11 @@ class ChainableMAX7219(MAX7219):
         *,
         baudrate: int = 8000000,
         polarity: int = 0,
-        phase: int = 0
+        phase: int = 0,
     ):
         self.chain_length = (height // 8) * (width // 8)
 
-        super().__init__(
-            width, height, spi, cs, baudrate=baudrate, polarity=polarity, phase=phase
-        )
+        super().__init__(width, height, spi, cs, baudrate=baudrate, polarity=polarity, phase=phase)
         self._buffer = bytearray(self.chain_length * 8)
         self.framebuf = framebuf.FrameBuffer1(self._buffer, self.chain_length * 8, 8)
 

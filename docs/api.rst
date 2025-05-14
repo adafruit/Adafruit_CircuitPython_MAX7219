@@ -1,6 +1,9 @@
 
 .. If you created a package, create one automodule per module in the package.
 
+API Reference
+#############
+
 .. automodule:: adafruit_max7219.max7219
    :members:
    :show-inheritance:
