@@ -1,12 +1,13 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-import time
 import random
+import time
+
 import board
 import digitalio
-from adafruit_max7219 import bcddigits
 
+from adafruit_max7219 import bcddigits
 
 # You may need to change the chip select pin depending on your wiring
 spi = board.SPI()
@@ -20,7 +21,7 @@ while True:
 
     # place 8-digit number on display
     value = 12345678
-    leds.show_str(0, "{:8}".format(value))
+    leds.show_str(0, f"{value:8}")
     leds.show()
 
     # increase the brightness slowly
@@ -73,7 +74,7 @@ while True:
     for _ in range(10):
         number = random.uniform(-1.0, 1.0)
         number *= 10000.0
-        number_string = "{:9.3f}".format(number)
+        number_string = f"{number:9.3f}"
         leds.clear_all()
         leds.show_str(0, number_string)
         leds.show()

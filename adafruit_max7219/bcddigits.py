@@ -6,14 +6,17 @@
 `adafruit_max7219.bcddigits.BCDDigits`
 ====================================================
 """
+
 from micropython import const
+
 from adafruit_max7219 import max7219
 
 try:
     # Used only for typing
     from typing import List
-    import digitalio
+
     import busio
+    import digitalio
 except ImportError:
     pass
 

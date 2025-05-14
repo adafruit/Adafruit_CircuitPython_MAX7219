@@ -2,10 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
 import digitalio
-from adafruit_max7219 import matrices
 
+from adafruit_max7219 import matrices
 
 # You may need to change the chip select pin depending on your wiring
 spi = board.SPI()

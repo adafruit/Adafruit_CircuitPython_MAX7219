@@ -7,15 +7,18 @@
 `adafruit_max7219.matrices`
 ====================================================
 """
-from micropython import const
+
 from adafruit_framebuf import BitmapFont
+from micropython import const
+
 from adafruit_max7219 import max7219
 
 try:
     # Used only for typing
     from typing import Tuple
-    import digitalio
+
     import busio
+    import digitalio
 except ImportError:
     pass
 
@@ -53,13 +56,7 @@ class Matrix8x8(max7219.MAX7219):
         self.show()
 
     def text(
-        self,
-        strg: str,
-        xpos: int,
-        ypos: int,
-        bit_value: int = 1,
-        *,
-        font_name: str = "font5x8.bin"
+        self, strg: str, xpos: int, ypos: int, bit_value: int = 1, *, font_name: str = "font5x8.bin"
     ) -> None:
         """
         Draw text in the 8x8 matrix.
@@ -99,7 +96,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
         width: int,
         height: int,
         *,
-        rotation: int = 1
+        rotation: int = 1,
     ):
         super().__init__(width, height, spi, cs)
 
@@ -149,7 +146,6 @@ class CustomMatrix(max7219.ChainableMAX7219):
         """
         self.fill(0)
 
-    # pylint: disable=inconsistent-return-statements
     def pixel(self, xpos: int, ypos: int, bit_value: int = None) -> None:
         """
         Set one buffer bit
@@ -172,9 +168,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
         :return: framebuffer coordinates (x, y)
         :rtype: Tuple[int]
         """
-        return (xpos - ((xpos // 8) * 8)) % 8, xpos // 8 + self.y_index[
-            ypos * self.y_offset
-        ]
+        return (xpos - ((xpos // 8) * 8)) % 8, xpos // 8 + self.y_index[ypos * self.y_offset]
 
     def _get_pixel(self, xpos: int, ypos: int) -> int:
         """
@@ -222,9 +216,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
                 x += dt_x
             y += dt_y
 
-    def rect(
-        self, x: int, y: int, width: int, height: int, color: int, fill: bool = False
-    ) -> None:
+    def rect(self, x: int, y: int, width: int, height: int, color: int, fill: bool = False) -> None:
         """
         Draw a rectangle at the given position of the given size, color, and fill.
 
@@ -235,14 +227,13 @@ class CustomMatrix(max7219.ChainableMAX7219):
         :param int color: color of rectangle
         :param bool fill: 1 pixel outline or filled rectangle (default: False)
         """
-        # pylint: disable=too-many-arguments
         for row in range(height):
             y_pos = row + y
             for col in range(width):
                 x_pos = col + x
                 if fill:
                     self.pixel(x_pos, y_pos, color)
-                elif y_pos in (y, y + height - 1) or x_pos in (x, x + width - 1):
+                elif y_pos in {y, y + height - 1} or x_pos in {x, x + width - 1}:
                     self.pixel(x_pos, y_pos, color)
                 else:
                     continue
@@ -257,7 +248,6 @@ class CustomMatrix(max7219.ChainableMAX7219):
         :param int height: height of rectangle
         :param int color: color of rectangle
         """
-        # pylint: disable=too-many-arguments
         return self.rect(x, y, width, height, color, True)
 
     # Adafruit Circuit Python Framebuf Text Function
@@ -271,7 +261,7 @@ class CustomMatrix(max7219.ChainableMAX7219):
         color: int = 1,
         *,
         font_name: str = "font5x8.bin",
-        size: int = 1
+        size: int = 1,
     ) -> None:
         """
         Draw text in the matrix.
@@ -297,7 +287,5 @@ class CustomMatrix(max7219.ChainableMAX7219):
                     and ypos + (height * size) > 0
                     and ypos < self.height
                 ):
-                    self._font.draw_char(
-                        char, char_x, ypos, self.framebuf, color, size=size
-                    )
+                    self._font.draw_char(char, char_x, ypos, self.framebuf, color, size=size)
             ypos += height * size
